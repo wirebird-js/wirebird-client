@@ -1,0 +1,19 @@
+{
+    "name": "http-inspector",
+    "version": "0.0.1",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test-server": "node test/server",
+        "test": "jest"
+    },
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "axios": "^0.19.0",
+        "eslint": "^6.0.1",
+        "express": "^4.17.1",
+        "jest": "^24.8.0",
+        "sleep-promise": "^8.0.1"
+    }
+}
