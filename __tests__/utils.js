@@ -1,13 +1,16 @@
-exports.removeUnstableData = data => {
-    const {
-        request,
-        response,
-        response: {
-            headers: { date, etag, ...responseHeaders }
+const _ = require('lodash');
+
+exports.removeUnstableData = input => {
+    const output = _.cloneDeep(input);
+    if (output.response) {
+        if (output.response.headers) {
+            delete output.response.headers.date;
+            delete output.response.headers.etag;
         }
-    } = data;
-    return {
-        request,
-        response: { ...response, headers: responseHeaders }
-    };
+    }
+    if (output.error) {
+        delete output.error.stack;
+    }
+
+    return output;
 };
