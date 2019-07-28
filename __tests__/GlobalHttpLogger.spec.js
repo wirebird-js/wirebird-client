@@ -3,6 +3,8 @@ const sleep = require('sleep-promise');
 const GlobalHttpLogger = require('../lib/GlobalHttpLogger');
 const { prepareSnapshot } = require('./utils');
 
+const skipTick = () => sleep(0);
+
 describe('GlobalHttpLogger', () => {
     it('should capture get requests', async () => {
         const onRequestEnd = jest.fn();
@@ -12,7 +14,7 @@ describe('GlobalHttpLogger', () => {
         expect(res.data).toEqual('Hello World!');
         expect(res.status).toEqual(200);
 
-        await sleep(100);
+        await skipTick();
         expect(
             prepareSnapshot(onRequestEnd.mock.calls[0][0])
         ).toMatchSnapshot();
@@ -28,7 +30,7 @@ describe('GlobalHttpLogger', () => {
         expect(res.data).toEqual({ hello: 'world' });
         expect(res.status).toEqual(200);
 
-        await sleep(100);
+        await skipTick();
         expect(
             prepareSnapshot(onRequestEnd.mock.calls[0][0])
         ).toMatchSnapshot();
@@ -44,7 +46,7 @@ describe('GlobalHttpLogger', () => {
         expect(res.data).toEqual({ error: 'Not found' });
         expect(res.status).toEqual(404);
 
-        await sleep(100);
+        await skipTick();
         expect(
             prepareSnapshot(onRequestEnd.mock.calls[0][0])
         ).toMatchSnapshot();
@@ -63,8 +65,7 @@ describe('GlobalHttpLogger', () => {
             'getaddrinfo ENOTFOUND never.existing.host.asdfgh never.existing.host.asdfgh:80'
         );
 
-        await sleep(100);
-
+        await skipTick();
         expect(
             prepareSnapshot(onRequestEnd.mock.calls[0][0])
         ).toMatchSnapshot();
