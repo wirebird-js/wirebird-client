@@ -21,22 +21,18 @@ export interface LoggerError {
     stack: string;
 }
 
-export interface LoggerOnResponseError {
+export interface LoggerEventWithError {
     request: LoggerRequest;
     response: null;
     error: LoggerError;
 }
 
-export interface LoggerOnResponseResponse {
+export interface LoggerEventWithResponse {
     request: LoggerRequest;
     response: LoggerResponse;
     error: null;
 }
 
-export type LoggerOnResponsePayload =
-    | LoggerOnResponseResponse
-    | LoggerOnResponseError;
+export type LoggerEvent = LoggerEventWithResponse | LoggerEventWithError;
 
-export type LoggerOnResponseCallback = (
-    payload: LoggerOnResponsePayload
-) => void;
+export type LoggerEventHandler = (payload: LoggerEvent) => void;

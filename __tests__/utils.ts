@@ -1,9 +1,9 @@
-import { LoggerOnResponsePayload } from '../src/SharedTypes';
+import { LoggerEvent } from '../src/SharedTypes';
 const _ = require('lodash');
 
 export const removeUnstableData = (
-    input: LoggerOnResponsePayload
-): LoggerOnResponsePayload => {
+    input: LoggerEvent
+): LoggerEvent => {
     const output = _.cloneDeep(input);
     if (output.response) {
         if (output.response.headers) {
@@ -19,8 +19,8 @@ export const removeUnstableData = (
 };
 
 export const withReadableBuffers = (
-    input: LoggerOnResponsePayload
-): LoggerOnResponsePayload => {
+    input: LoggerEvent
+): LoggerEvent => {
     const output = _.cloneDeep(input);
     if (output.request && output.request.body) {
         output.request.body = output.request.body.toString('utf8');
@@ -32,5 +32,5 @@ export const withReadableBuffers = (
 };
 
 export const prepareSnapshot = (
-    input: LoggerOnResponsePayload
-): LoggerOnResponsePayload => withReadableBuffers(removeUnstableData(input));
+    input: LoggerEvent
+): LoggerEvent => withReadableBuffers(removeUnstableData(input));

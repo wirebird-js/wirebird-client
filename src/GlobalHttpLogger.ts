@@ -3,11 +3,11 @@
 import http, { ClientRequest, ServerResponse } from 'http';
 import https from 'https';
 import {
-    LoggerOnResponsePayload,
+    LoggerEvent,
     LoggerHeaders,
     LoggerRequest,
     LoggerResponse,
-    LoggerOnResponseCallback
+    LoggerEventHandler
 } from './SharedTypes';
 
 const matches = process.version.match(/^v(\d+)\.(\d+)\.(\d+)$/);
@@ -114,7 +114,7 @@ const interceptRequest = async (
     request: ClientRequest,
     {
         onRequestEnd
-    }: { onRequestEnd: (payload: LoggerOnResponsePayload) => void }
+    }: { onRequestEnd: (payload: LoggerEvent) => void }
 ) => {
     const [requestBody, { response, responseBody, error }] = await Promise.all([
         collectRequestBody(request),
@@ -180,8 +180,8 @@ const interceptRequest = async (
 };
 
 export default class GlobalHttpLogger {
-    onRequestEnd: LoggerOnResponseCallback;
-    constructor({ onRequestEnd }: { onRequestEnd: LoggerOnResponseCallback }) {
+    onRequestEnd: LoggerEventHandler;
+    constructor({ onRequestEnd }: { onRequestEnd: LoggerEventHandler }) {
         this.onRequestEnd = onRequestEnd;
     }
     start() {
