@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`GlobalHttpLogger should capture get requests 1`] = `
+exports[`GlobalHttpLogger should capture GET requests 1`] = `
 Object {
   "error": null,
   "request": Object {
@@ -26,7 +26,7 @@ Object {
 }
 `;
 
-exports[`GlobalHttpLogger should capture get requests with error response 1`] = `
+exports[`GlobalHttpLogger should capture GET requests with error response 1`] = `
 Object {
   "error": null,
   "request": Object {
@@ -52,7 +52,7 @@ Object {
 }
 `;
 
-exports[`GlobalHttpLogger should capture get requests with network error 1`] = `
+exports[`GlobalHttpLogger should capture GET requests with network error 1`] = `
 Object {
   "error": Object {
     "code": "ENOTFOUND",
@@ -72,7 +72,7 @@ Object {
 }
 `;
 
-exports[`GlobalHttpLogger should capture post requests 1`] = `
+exports[`GlobalHttpLogger should capture POST requests 1`] = `
 Object {
   "error": null,
   "request": Object {
