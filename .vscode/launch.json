@@ -14,13 +14,6 @@
             "console": "integratedTerminal",
             "internalConsoleOptions": "neverOpen",
             "disableOptimisticBPs": true
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Example",
-            "program": "${workspaceFolder}/lib/example.js",
-            "console": "integratedTerminal"
         }
     ]
 }
