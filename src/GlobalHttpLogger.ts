@@ -1,6 +1,6 @@
 // https://github.com/Microsoft/TypeScript-Babel-Starter
 
-import http, { ClientRequest, ServerResponse } from 'http';
+import http, { ClientRequest, ServerResponse, IncomingMessage } from 'http';
 import https from 'https';
 import {
     LoggerEvent,
@@ -19,16 +19,16 @@ interface ClientRequestWithUndocumentedMembers extends ClientRequest {
     _headers: { [headerName: string]: string };
 }
 
-interface ServerResponseWithUndocumentedMembers extends ServerResponse {
-    headers: { [headerName: string]: string };
-}
+// interface ServerResponseWithUndocumentedMembers extends ServerResponse {
+//     headers: { [headerName: string]: string };
+// }
 
 class ResponseBodyCollector {
     buffers: Array<Buffer>;
 
     bodyPromise: Promise<Buffer>;
 
-    constructor(response: ServerResponse) {
+    constructor(response: IncomingMessage) {
         this.buffers = [];
         this.bodyPromise = new Promise((resolve, reject) => {
             response.prependListener('data', chunk => {
@@ -49,7 +49,7 @@ class ResponseBodyCollector {
 const waitForResponseOrError = (
     request: ClientRequest
 ): Promise<{
-    response?: ServerResponse;
+    response?: IncomingMessage;
     responseBodyCollector?: ResponseBodyCollector;
     error?: Error;
 }> =>
@@ -155,10 +155,9 @@ const interceptRequest = async (
     };
     if (response) {
         const loggerResponse: LoggerResponse = {
-            status: response.statusCode,
+            status: response.statusCode || 0,
             body: responseBody ? responseBody : null,
-            headers: (response as ServerResponseWithUndocumentedMembers)
-                .headers as LoggerHeaders
+            headers: response.headers as LoggerHeaders
         };
         onRequestEnd({
             request: loggerRequest,

@@ -2,7 +2,7 @@ import GlobalHttpLogger from './GlobalHttpLogger';
 import requestToCurl from './requestToCurl';
 import { LoggerEvent } from './SharedTypes';
 
-export const startCurlLogger = () => {
+export const main = () => {
     const logger = new GlobalHttpLogger({
         onRequestEnd: (event: LoggerEvent) => {
             if (event.request) {
@@ -13,3 +13,5 @@ export const startCurlLogger = () => {
     });
     logger.start();
 };
+
+main();
