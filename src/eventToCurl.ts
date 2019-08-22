@@ -1,7 +1,8 @@
-import { LoggerRequest } from './SharedTypes';
+import { LoggerEvent } from './SharedTypes';
 import escape from 'shell-escape';
 
-export default function requestToCurl(request: LoggerRequest): string {
+export default function eventToCurl(event: LoggerEvent): string {
+    const { request } = event;
     const chunks: Array<string> = [];
     chunks.push('curl');
     chunks.push(request.url);
