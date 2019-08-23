@@ -19,8 +19,12 @@ const getFormatter = (format?: string) => {
 
 export const main = () => {
     const {
-        env: { HTTP_INSPECTOR_FORMAT: format }
+        env: { HTTP_INSPECTOR: env, HTTP_INSPECTOR_FORMAT: format }
     } = process;
+
+    if (env !== 'true' && env !== 'on' && env !== '1' && env !== 'yes') {
+        return;
+    }
 
     const formatter = getFormatter(format);
 
