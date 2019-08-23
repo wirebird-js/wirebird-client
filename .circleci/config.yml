@@ -60,7 +60,7 @@ workflows:
           #     only: /^v.*/
       - deploy:
           requires:
-            - test
+            - test-and-build
           filters:
             tags:
               only: /^v.*/
