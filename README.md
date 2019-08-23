@@ -1,7 +1,2 @@
-# node-http-inspector
+# http-inspector
 
-## Run unit tests
-
-```
-npm run test
-```

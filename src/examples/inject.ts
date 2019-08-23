@@ -2,8 +2,6 @@ import axios from 'axios';
 import superagent from 'superagent';
 import request from 'request-promise-native';
 
-import '../inject';
-
 const main = async () => {
     await axios.get('https://example.com');
     await axios.get('https://google.com');

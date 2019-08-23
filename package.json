@@ -11,7 +11,7 @@
         "build:types": "tsc --emitDeclarationOnly",
         "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline",
         "example:curlLogger": "npm run build:js && node ./lib/examples/curlLogger.js",
-        "example:inject": "npm run build:js && node ./lib/examples/inject.js"
+        "example:inject": "npm run build:js && node -r ./inject ./lib/examples/inject.js"
     },
     "author": "",
     "license": "ISC",
