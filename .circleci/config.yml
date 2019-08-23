@@ -10,7 +10,7 @@ defaults: &defaults
     - image: circleci/node:10.16.3
 
 jobs:
-  build:
+  test-and-build:
     <<: *defaults  
     steps:
       - checkout
@@ -54,7 +54,7 @@ workflows:
   version: 2
   test-deploy:
     jobs:
-      - test: {}
+      - test-and-build: {}
           # filters:
           #   tags:
           #     only: /^v.*/
