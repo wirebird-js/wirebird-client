@@ -54,10 +54,10 @@ workflows:
   version: 2
   test-deploy:
     jobs:
-      - test-and-build: {}
-          # filters:
-          #   tags:
-          #     only: /^v.*/
+      - test-and-build:
+          filters:
+            tags:
+              only: /^v.*/
       - deploy:
           requires:
             - test-and-build
