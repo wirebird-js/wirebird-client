@@ -68,7 +68,11 @@ describe('GlobalHttpLogger', () => {
         const onRequestEnd = jest.fn();
         const logger = new GlobalHttpLogger({ onRequestEnd });
         logger.start();
-        const res = await axios.get('http://127.0.0.1:13000/compressable');
+        const res = await axios.get('http://127.0.0.1:13000/compressable', {
+            headers: {
+                'accept-encoding': 'gzip'
+            }
+        });
         expect(res.data).toEqual('Hello World!');
         expect(res.status).toEqual(200);
         await skipTick();

@@ -35,7 +35,6 @@ class ResponseBodyCollector {
                 this.buffers.push(chunk);
             });
             response.prependListener('end', () => {
-                debugger
                 const body = Buffer.concat(this.buffers);
                 resolve(body);
             });
