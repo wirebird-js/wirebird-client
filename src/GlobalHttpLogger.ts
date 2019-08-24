@@ -9,6 +9,7 @@ import {
     LoggerResponse,
     LoggerEventHandler
 } from './SharedTypes';
+import { createUnzip, Unzip } from 'zlib';
 
 const matches = process.version.match(/^v(\d+)\.(\d+)\.(\d+)$/);
 const nodeMajorVersion = matches ? +matches[1] : 0;
@@ -28,13 +29,34 @@ class ResponseBodyCollector {
 
     bodyPromise: Promise<Buffer>;
 
+    private shouldUnzip(response: IncomingMessage): boolean {
+        const encoding = response.headers['content-encoding'];
+        const status = response.statusCode;
+        return (
+            !!encoding &&
+            ['gzip', 'deflate', 'compress'].includes(encoding) &&
+            status !== 204
+        );
+    }
+
+    private unzip(response: any): Unzip {
+        //TODO: remove any!!!
+        const stream = response.pipe(createUnzip());
+        return stream;
+    }
+
     constructor(response: IncomingMessage) {
         this.buffers = [];
+
+        const stream = this.shouldUnzip(response)
+            ? this.unzip(response)
+            : response;
+
         this.bodyPromise = new Promise((resolve, reject) => {
-            response.prependListener('data', chunk => {
+            stream.on('data', chunk => {
                 this.buffers.push(chunk);
             });
-            response.prependListener('end', () => {
+            stream.on('end', () => {
                 const body = Buffer.concat(this.buffers);
                 resolve(body);
             });
@@ -112,9 +134,7 @@ const collectRequestBody = (request: ClientRequest): Promise<Buffer | null> =>
 
 const interceptRequest = async (
     request: ClientRequest,
-    {
-        onRequestEnd
-    }: { onRequestEnd: (payload: LoggerEvent) => void }
+    { onRequestEnd }: { onRequestEnd: (payload: LoggerEvent) => void }
 ) => {
     const [requestBody, { response, responseBody, error }] = await Promise.all([
         collectRequestBody(request),

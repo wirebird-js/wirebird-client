@@ -40,6 +40,7 @@
         "typescript": "^3.5.3"
     },
     "dependencies": {
-        "shell-escape": "^0.2.0"
+        "shell-escape": "^0.2.0",
+        "zlib": "^1.0.5"
     }
 }
