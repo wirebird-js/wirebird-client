@@ -1,6 +1,6 @@
 {
     "name": "http-inspector",
-    "version": "0.0.2-2",
+    "version": "0.0.2",
     "description": "",
     "main": "index.js",
     "scripts": {
