@@ -19,6 +19,7 @@ Object {
       "connection": "close",
       "content-length": "12",
       "content-type": "text/html; charset=utf-8",
+      "vary": "Accept-Encoding",
       "x-powered-by": "Express",
     },
     "status": 200,
@@ -45,6 +46,7 @@ Object {
       "connection": "close",
       "content-length": "21",
       "content-type": "application/json; charset=utf-8",
+      "vary": "Accept-Encoding",
       "x-powered-by": "Express",
     },
     "status": 404,
@@ -93,6 +95,35 @@ Object {
       "connection": "close",
       "content-length": "17",
       "content-type": "application/json; charset=utf-8",
+      "vary": "Accept-Encoding",
+      "x-powered-by": "Express",
+    },
+    "status": 200,
+  },
+}
+`;
+
+exports[`GlobalHttpLogger should decode gzipped content 1`] = `
+Object {
+  "error": null,
+  "request": Object {
+    "body": null,
+    "headers": Object {
+      "accept": "application/json, text/plain, */*",
+      "accept-encoding": "gzip",
+      "host": "127.0.0.1:13000",
+      "user-agent": "axios/0.19.0",
+    },
+    "method": "GET",
+    "url": "http://127.0.0.1:13000/compressable",
+  },
+  "response": Object {
+    "body": "Hello World!",
+    "headers": Object {
+      "connection": "close",
+      "content-type": "text/html; charset=utf-8",
+      "transfer-encoding": "chunked",
+      "vary": "Accept-Encoding",
       "x-powered-by": "Express",
     },
     "status": 200,

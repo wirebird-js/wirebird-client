@@ -10,8 +10,9 @@
         "build": "npm run build:types && npm run build:js",
         "build:types": "tsc --emitDeclarationOnly",
         "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline",
+        "start-test-server": "node ./__tests__/startServer.js",
         "example:curlLogger": "npm run build:js && node ./lib/examples/curlLogger.js",
-        "example:inject": "npm run build:js && node -r ./inject ./lib/examples/inject.js"
+        "example:inject": "npm run build:js && HTTP_INSPECTOR=1 HTTP_INSPECTOR_FORMAT=pretty node -r ./inject ./lib/examples/inject.js"
     },
     "author": "",
     "license": "ISC",
@@ -28,6 +29,7 @@
         "@types/shell-escape": "^0.2.0",
         "@types/superagent": "^4.1.3",
         "axios": "^0.19.0",
+        "compression": "^1.7.4",
         "eslint": "^6.0.1",
         "express": "^4.17.1",
         "jest": "^24.8.0",
@@ -38,6 +40,7 @@
         "typescript": "^3.5.3"
     },
     "dependencies": {
-        "shell-escape": "^0.2.0"
+        "shell-escape": "^0.2.0",
+        "zlib": "^1.0.5"
     }
 }

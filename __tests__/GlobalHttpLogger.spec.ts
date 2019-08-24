@@ -1,4 +1,5 @@
 import axios from 'axios';
+import superagent from 'superagent';
 import sleep from 'sleep-promise';
 import GlobalHttpLogger from '../src/GlobalHttpLogger';
 import { prepareSnapshot } from './utils';
@@ -57,6 +58,23 @@ describe('GlobalHttpLogger', () => {
         ).rejects.toThrow(
             'getaddrinfo ENOTFOUND never.existing.host.asdfgh never.existing.host.asdfgh:80'
         );
+        await skipTick();
+        expect(
+            prepareSnapshot(onRequestEnd.mock.calls[0][0])
+        ).toMatchSnapshot();
+    });
+
+    it('should decode gzipped content', async () => {
+        const onRequestEnd = jest.fn();
+        const logger = new GlobalHttpLogger({ onRequestEnd });
+        logger.start();
+        const res = await axios.get('http://127.0.0.1:13000/compressable', {
+            headers: {
+                'accept-encoding': 'gzip'
+            }
+        });
+        expect(res.data).toEqual('Hello World!');
+        expect(res.status).toEqual(200);
         await skipTick();
         expect(
             prepareSnapshot(onRequestEnd.mock.calls[0][0])

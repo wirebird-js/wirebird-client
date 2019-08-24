@@ -7,8 +7,10 @@ import {
 
 const LINE_SEP = '------------------------------------------------';
 
-const renderHeading = (request: LoggerRequest) =>
-    `${request.method} ${request.url}`;
+const renderHeading = ({ request, response, error }: LoggerEvent) => {
+    const statusLine = response ? response.status : error ? error.message : '';
+    return `${request.method} ${request.url}\n > ${statusLine}`;
+};
 
 const renderHeaders = (headers: LoggerHeaders) =>
     Object.keys(headers)
@@ -16,7 +18,7 @@ const renderHeaders = (headers: LoggerHeaders) =>
         .join('\n');
 
 const renderBody = (headers: LoggerHeaders, body: Buffer | null) =>
-    body ? body.toString('utf8') : '<body is empty>';
+    body ? body.toString('utf8') : ' <empty>';
 
 const renderError = (error: LoggerError) => {
     return [
@@ -29,7 +31,7 @@ const renderError = (error: LoggerError) => {
 export default function eventToPretty(event: LoggerEvent): string {
     const parts = [];
     parts.push(LINE_SEP);
-    parts.push(renderHeading(event.request));
+    parts.push(renderHeading(event));
     parts.push('Request headers:');
     parts.push(renderHeaders(event.request.headers));
     parts.push('Request body:');
