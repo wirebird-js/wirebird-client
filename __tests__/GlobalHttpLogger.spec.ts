@@ -7,6 +7,23 @@ import { prepareSnapshot } from './utils';
 const skipTick = () => sleep(0);
 
 describe('GlobalHttpLogger', () => {
+    it('should not capture requests if shouldLog returns false', async () => {
+        const onRequestEnd = jest.fn();
+        const logger = new GlobalHttpLogger({
+            onRequestEnd,
+            shouldLog: req => !req.headers['x-http-inspector-do-not-track']
+        });
+        logger.start();
+        const res = await axios.get('http://127.0.0.1:13000/get?a=b', {
+            headers: {
+                'x-http-inspector-do-not-track': '1'
+            }
+        });
+        expect(res.data).toEqual('Hello World!');
+        expect(res.status).toEqual(200);
+        await skipTick();
+        expect(onRequestEnd.mock.calls.length).toEqual(0);
+    });
     it('should capture GET requests', async () => {
         const onRequestEnd = jest.fn();
         const logger = new GlobalHttpLogger({ onRequestEnd });

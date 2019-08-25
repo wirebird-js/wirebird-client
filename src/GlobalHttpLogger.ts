@@ -7,7 +7,8 @@ import {
     LoggerHeaders,
     LoggerRequest,
     LoggerResponse,
-    LoggerEventHandler
+    LoggerEventHandler,
+    LoggerShouldLog
 } from './SharedTypes';
 import { createUnzip, Unzip } from 'zlib';
 
@@ -134,8 +135,25 @@ const collectRequestBody = (request: ClientRequest): Promise<Buffer | null> =>
 
 const interceptRequest = async (
     request: ClientRequest,
-    { onRequestEnd }: { onRequestEnd: (payload: LoggerEvent) => void }
+    onRequestEnd: (payload: LoggerEvent) => void,
+    shouldLog?: LoggerShouldLog
 ) => {
+    const protocol = (request as ClientRequestWithUndocumentedMembers).agent
+        .protocol;
+    const host = request.getHeader('host');
+    const path = request.path;
+
+    const loggerRequest: LoggerRequest = {
+        url: `${protocol}//${host}${path}`,
+        method: (request as ClientRequestWithUndocumentedMembers).method,
+        headers: (request as ClientRequestWithUndocumentedMembers)._headers,
+        body: null
+    };
+
+    if (shouldLog && !shouldLog(loggerRequest)) {
+        return;
+    }
+
     const [requestBody, { response, responseBody, error }] = await Promise.all([
         collectRequestBody(request),
         (async () => {
@@ -162,17 +180,8 @@ const interceptRequest = async (
         })()
     ]);
 
-    const protocol = (request as ClientRequestWithUndocumentedMembers).agent
-        .protocol;
-    const host = request.getHeader('host');
-    const path = request.path;
+    loggerRequest.body = requestBody ? requestBody : null;
 
-    const loggerRequest: LoggerRequest = {
-        url: `${protocol}//${host}${path}`,
-        method: (request as ClientRequestWithUndocumentedMembers).method,
-        headers: (request as ClientRequestWithUndocumentedMembers)._headers,
-        body: requestBody ? requestBody : null
-    };
     if (response) {
         const loggerResponse: LoggerResponse = {
             status: response.statusCode || 0,
@@ -198,10 +207,17 @@ const interceptRequest = async (
     }
 };
 
-export default class GlobalHttpLogger {
+export interface GlobalHttpLoggerOptions {
     onRequestEnd: LoggerEventHandler;
-    constructor({ onRequestEnd }: { onRequestEnd: LoggerEventHandler }) {
+    shouldLog?: LoggerShouldLog;
+}
+
+export default class GlobalHttpLogger {
+    private onRequestEnd: LoggerEventHandler;
+    private shouldLog?: LoggerShouldLog;
+    constructor({ onRequestEnd, shouldLog }: GlobalHttpLoggerOptions) {
         this.onRequestEnd = onRequestEnd;
+        this.shouldLog = shouldLog;
     }
     start() {
         const { onRequestEnd } = this;
@@ -211,7 +227,7 @@ export default class GlobalHttpLogger {
             ...rest: any
         ) => {
             const req = func.call(object, ...rest);
-            interceptRequest(req, { onRequestEnd });
+            interceptRequest(req, onRequestEnd, this.shouldLog);
             return req;
         };
 

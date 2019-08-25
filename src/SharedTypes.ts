@@ -36,3 +36,4 @@ export interface LoggerEventWithResponse {
 export type LoggerEvent = LoggerEventWithResponse | LoggerEventWithError;
 
 export type LoggerEventHandler = (payload: LoggerEvent) => void;
+export type LoggerShouldLog = (req: LoggerRequest) => boolean;
