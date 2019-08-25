@@ -2,25 +2,30 @@
     "name": "http-inspector",
     "version": "0.0.5",
     "description": "",
-    "main": "index.js",
+    "license": "ISC",
+    "author": "",
     "files": [
         "lib",
         "inject.js",
         "README.md"
     ],
+    "main": "lib/main.js",
+    "types": "lib/src/main.d.ts",
     "scripts": {
+        "build": "npm run build:types && npm run build:js",
+        "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline",
+        "build:types": "tsc --emitDeclarationOnly",
+        "example:curlLogger": "npm run build:js && node ./lib/examples/curlLogger.js",
+        "example:inject": "npm run build:js && HTTP_INSPECTOR=1 HTTP_INSPECTOR_FORMAT=pretty node -r ./inject ./lib/examples/inject.js",
+        "start-test-server": "node ./__tests__/startServer.js",
         "test": "jest",
         "type-check": "tsc --noEmit",
-        "type-check:watch": "npm run type-check -- --watch",
-        "build": "npm run build:types && npm run build:js",
-        "build:types": "tsc --emitDeclarationOnly",
-        "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline",
-        "start-test-server": "node ./__tests__/startServer.js",
-        "example:curlLogger": "npm run build:js && node ./lib/examples/curlLogger.js",
-        "example:inject": "npm run build:js && HTTP_INSPECTOR=1 HTTP_INSPECTOR_FORMAT=pretty node -r ./inject ./lib/examples/inject.js"
+        "type-check:watch": "npm run type-check -- --watch"
     },
-    "author": "",
-    "license": "ISC",
+    "dependencies": {
+        "shell-escape": "^0.2.0",
+        "zlib": "^1.0.5"
+    },
     "devDependencies": {
         "@babel/cli": "^7.5.5",
         "@babel/core": "^7.5.5",
@@ -43,9 +48,5 @@
         "sleep-promise": "^8.0.1",
         "superagent": "^5.1.0",
         "typescript": "^3.5.3"
-    },
-    "dependencies": {
-        "shell-escape": "^0.2.0",
-        "zlib": "^1.0.5"
     }
 }
