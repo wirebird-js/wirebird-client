@@ -3,6 +3,11 @@
     "version": "0.0.4",
     "description": "",
     "main": "index.js",
+    "files": [
+        "lib",
+        "inject.js",
+        "README.md"
+    ],
     "scripts": {
         "test": "jest",
         "type-check": "tsc --noEmit",
