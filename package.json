@@ -1,6 +1,6 @@
 {
     "name": "http-inspector",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "description": "",
     "license": "ISC",
     "author": "",
@@ -15,7 +15,7 @@
         "build": "npm run build:types && npm run build:js",
         "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline",
         "build:types": "tsc --emitDeclarationOnly",
-        "build:schema":"typescript-json-schema src/SharedTypes.ts LoggerEvent",
+        "build:schema": "typescript-json-schema src/SharedTypes.ts LoggerEvent",
         "example:curlLogger": "npm run build:js && node ./lib/examples/curlLogger.js",
         "example:inject": "npm run build:js && HTTP_INSPECTOR=1 HTTP_INSPECTOR_FORMAT=pretty node -r ./inject ./lib/examples/inject.js",
         "start-test-server": "node ./__tests__/startServer.js",
