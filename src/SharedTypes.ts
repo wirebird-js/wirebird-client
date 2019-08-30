@@ -2,18 +2,21 @@ export interface LoggerHeaders {
     [headerName: string]: string;
 }
 
-export interface LoggerRequest {
+export interface BaseLoggerRequest<T> {
     url: string;
-    body: Buffer | null;
+    body: T | null;
     headers: LoggerHeaders;
     method: string;
 }
 
-export interface LoggerResponse {
-    body: Buffer | null;
+export interface BaseLoggerResponse<T> {
+    body: T | null;
     headers: LoggerHeaders;
     status: number;
 }
+
+export type LoggerRequest = BaseLoggerRequest<Buffer>;
+export type LoggerResponse = BaseLoggerResponse<Buffer>;
 
 export interface LoggerError {
     code: string;
