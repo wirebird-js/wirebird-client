@@ -10,7 +10,9 @@ Object {
       "host": "127.0.0.1:13000",
       "user-agent": "axios/0.19.0",
     },
+    "id": "[presents]",
     "method": "GET",
+    "timeStart": 1,
     "url": "http://127.0.0.1:13000/get?a=b",
   },
   "response": Object {
@@ -23,6 +25,7 @@ Object {
       "x-powered-by": "Express",
     },
     "status": 200,
+    "timeStart": 1,
   },
 }
 `;
@@ -37,7 +40,9 @@ Object {
       "host": "127.0.0.1:13000",
       "user-agent": "axios/0.19.0",
     },
+    "id": "[presents]",
     "method": "GET",
+    "timeStart": 1,
     "url": "http://127.0.0.1:13000/get/404",
   },
   "response": Object {
@@ -50,6 +55,7 @@ Object {
       "x-powered-by": "Express",
     },
     "status": 404,
+    "timeStart": 1,
   },
 }
 `;
@@ -67,7 +73,9 @@ Object {
       "host": "never.existing.host.asdfgh",
       "user-agent": "axios/0.19.0",
     },
+    "id": "[presents]",
     "method": "GET",
+    "timeStart": 1,
     "url": "http://never.existing.host.asdfgh/",
   },
   "response": null,
@@ -86,7 +94,9 @@ Object {
       "host": "127.0.0.1:13000",
       "user-agent": "axios/0.19.0",
     },
+    "id": "[presents]",
     "method": "POST",
+    "timeStart": 1,
     "url": "http://127.0.0.1:13000/post",
   },
   "response": Object {
@@ -99,6 +109,7 @@ Object {
       "x-powered-by": "Express",
     },
     "status": 200,
+    "timeStart": 1,
   },
 }
 `;
@@ -114,7 +125,9 @@ Object {
       "host": "127.0.0.1:13000",
       "user-agent": "axios/0.19.0",
     },
+    "id": "[presents]",
     "method": "GET",
+    "timeStart": 1,
     "url": "http://127.0.0.1:13000/compressable",
   },
   "response": Object {
@@ -127,6 +140,7 @@ Object {
       "x-powered-by": "Express",
     },
     "status": 200,
+    "timeStart": 1,
   },
 }
 `;

@@ -1,14 +1,21 @@
 import { LoggerEvent } from '../src/SharedTypes';
 const _ = require('lodash');
 
-export const removeUnstableData = (
-    input: LoggerEvent
-): LoggerEvent => {
+export const removeUnstableData = (input: LoggerEvent): LoggerEvent => {
     const output = _.cloneDeep(input);
+    if (output.request.timeStart) {
+        output.request.timeStart = 1;
+    }
+    if (output.request.id) {
+        output.request.id = '[presents]';
+    }
     if (output.response) {
         if (output.response.headers) {
             delete output.response.headers.date;
             delete output.response.headers.etag;
+        }
+        if (output.response.timeStart) {
+            output.response.timeStart = 1;
         }
     }
     if (output.error) {
@@ -18,9 +25,7 @@ export const removeUnstableData = (
     return output;
 };
 
-export const withReadableBuffers = (
-    input: LoggerEvent
-): LoggerEvent => {
+export const withReadableBuffers = (input: LoggerEvent): LoggerEvent => {
     const output = _.cloneDeep(input);
     if (output.request && output.request.body) {
         output.request.body = output.request.body.toString('utf8');
@@ -31,6 +36,5 @@ export const withReadableBuffers = (
     return output;
 };
 
-export const prepareSnapshot = (
-    input: LoggerEvent
-): LoggerEvent => withReadableBuffers(removeUnstableData(input));
+export const prepareSnapshot = (input: LoggerEvent): LoggerEvent =>
+    withReadableBuffers(removeUnstableData(input));

@@ -14,8 +14,8 @@
     "scripts": {
         "build": "npm run build:types && npm run build:js",
         "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline",
-        "build:types": "tsc --emitDeclarationOnly",
         "build:schema": "mkdir -p lib/schemas && typescript-json-schema --strictNullChecks --required src/SerializedTypes.ts SerializedLoggerEvent > lib/schemas/SerializedLoggerEvent.json",
+        "build:types": "tsc --emitDeclarationOnly",
         "example:curlLogger": "npm run build:js && node ./lib/examples/curlLogger.js",
         "example:inject": "npm run build:js && HTTP_INSPECTOR=1 HTTP_INSPECTOR_FORMAT=pretty node -r ./inject ./lib/examples/inject.js",
         "example:inject:monitor": "npm run build:js && HTTP_INSPECTOR=1 HTTP_INSPECTOR_FORMAT=monitor node -r ./inject ./lib/examples/inject.js",
@@ -25,6 +25,7 @@
         "type-check:watch": "npm run type-check -- --watch"
     },
     "dependencies": {
+        "nanoid": "^2.1.0",
         "shell-escape": "^0.2.0",
         "zlib": "^1.0.5"
     },
@@ -37,6 +38,7 @@
         "@babel/preset-env": "^7.5.5",
         "@babel/preset-typescript": "^7.3.3",
         "@types/jest": "^24.0.15",
+        "@types/nanoid": "^2.0.0",
         "@types/request-promise-native": "^1.0.16",
         "@types/shell-escape": "^0.2.0",
         "@types/superagent": "^4.1.3",

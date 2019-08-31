@@ -8,9 +8,11 @@ import {
     LoggerRequest,
     LoggerResponse,
     LoggerEventHandler,
-    LoggerShouldLog
+    LoggerShouldLog,
+    Timestamp
 } from './SharedTypes';
 import { createUnzip, Unzip } from 'zlib';
+import nanoid from 'nanoid';
 
 const matches = process.version.match(/^v(\d+)\.(\d+)\.(\d+)$/);
 const nodeMajorVersion = matches ? +matches[1] : 0;
@@ -20,10 +22,6 @@ interface ClientRequestWithUndocumentedMembers extends ClientRequest {
     method: string;
     _headers: { [headerName: string]: string };
 }
-
-// interface ServerResponseWithUndocumentedMembers extends ServerResponse {
-//     headers: { [headerName: string]: string };
-// }
 
 class ResponseBodyCollector {
     buffers: Array<Buffer>;
@@ -74,12 +72,14 @@ const waitForResponseOrError = (
 ): Promise<{
     response?: IncomingMessage;
     responseBodyCollector?: ResponseBodyCollector;
+    responseTimeStart?: Timestamp;
     error?: Error;
 }> =>
     new Promise((resolve, reject) => {
         request.prependOnceListener('response', response => {
+            const responseTimeStart = Date.now();
             const responseBodyCollector = new ResponseBodyCollector(response);
-            resolve({ response, responseBodyCollector });
+            resolve({ response, responseBodyCollector, responseTimeStart });
         });
         request.prependOnceListener('error', error => {
             resolve({ error });
@@ -144,6 +144,8 @@ const interceptRequest = async (
     const path = request.path;
 
     const loggerRequest: LoggerRequest = {
+        id: nanoid(),
+        timeStart: Date.now(),
         url: `${protocol}//${host}${path}`,
         method: (request as ClientRequestWithUndocumentedMembers).method,
         headers: (request as ClientRequestWithUndocumentedMembers)._headers,
@@ -154,17 +156,22 @@ const interceptRequest = async (
         return;
     }
 
-    const [requestBody, { response, responseBody, error }] = await Promise.all([
+    const [
+        requestBody,
+        { response, responseBody, responseTimeStart, error }
+    ] = await Promise.all([
         collectRequestBody(request),
         (async () => {
             const {
                 response,
                 responseBodyCollector,
+                responseTimeStart,
                 error
             } = await waitForResponseOrError(request);
             if (response && responseBodyCollector) {
                 return {
                     response,
+                    responseTimeStart,
                     responseBody: await responseBodyCollector.getBodyAsync(),
                     error: null
                 };
@@ -184,6 +191,7 @@ const interceptRequest = async (
 
     if (response) {
         const loggerResponse: LoggerResponse = {
+            timeStart: responseTimeStart || 0,
             status: response.statusCode || 0,
             body: responseBody ? responseBody : null,
             headers: response.headers as LoggerHeaders

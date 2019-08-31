@@ -1,8 +1,13 @@
+export type Timestamp = number;
+export type Uid = string;
+
 export interface LoggerHeaders {
     [headerName: string]: string;
 }
 
 export interface BaseLoggerRequest<T> {
+    id: Uid;
+    timeStart: Timestamp;
     url: string;
     body: T | null;
     headers: LoggerHeaders;
@@ -10,6 +15,7 @@ export interface BaseLoggerRequest<T> {
 }
 
 export interface BaseLoggerResponse<T> {
+    timeStart: Timestamp;
     body: T | null;
     headers: LoggerHeaders;
     status: number;
