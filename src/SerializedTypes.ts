@@ -1,7 +1,8 @@
 import {
     LoggerError,
     BaseLoggerRequest,
-    BaseLoggerResponse
+    BaseLoggerResponse,
+    ProcessData
 } from './SharedTypes';
 
 export type SerializedLoggerRequest = BaseLoggerRequest<string>;
@@ -19,6 +20,6 @@ export interface SerializedLoggerEventWithResponse {
     error: null;
 }
 
-export type SerializedLoggerEvent =
+export type SerializedLoggerEvent = (
     | SerializedLoggerEventWithResponse
-    | SerializedLoggerEventWithError;
+    | SerializedLoggerEventWithError) & { processData: ProcessData };

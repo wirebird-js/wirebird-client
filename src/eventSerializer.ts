@@ -1,5 +1,5 @@
 import { SerializedLoggerEvent } from './SerializedTypes';
-import { LoggerEvent } from './SharedTypes';
+import { LoggerEvent, ProcessData } from './SharedTypes';
 
 function serializeBody<T>(data: T): T & { body?: string } {
     const _data = (data as any) as { body?: Buffer };
@@ -13,12 +13,16 @@ function serializeBody<T>(data: T): T & { body?: string } {
     };
 }
 
-export const serializeEvent = (event: LoggerEvent): SerializedLoggerEvent => {
+export const serializeEvent = (
+    event: LoggerEvent,
+    processData: ProcessData
+): SerializedLoggerEvent => {
     if (event.response) {
         return {
             request: serializeBody(event.request),
             response: serializeBody(event.response),
-            error: null
+            error: null,
+            processData
         };
     }
 
@@ -26,7 +30,8 @@ export const serializeEvent = (event: LoggerEvent): SerializedLoggerEvent => {
         return {
             request: serializeBody(event.request),
             response: null,
-            error: event.error
+            error: event.error,
+            processData
         };
     }
 

@@ -12,7 +12,7 @@
     "main": "lib/main.js",
     "types": "lib/src/main.d.ts",
     "scripts": {
-        "build": "npm run build:types && npm run build:js",
+        "build": "npm run build:types && npm run build:js && build:schema",
         "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline",
         "build:schema": "mkdir -p lib/schemas && typescript-json-schema --strictNullChecks --required src/SerializedTypes.ts SerializedLoggerEvent > lib/schemas/SerializedLoggerEvent.json",
         "build:types": "tsc --emitDeclarationOnly",
@@ -51,6 +51,7 @@
         "request-promise-native": "^1.0.7",
         "sleep-promise": "^8.0.1",
         "superagent": "^5.1.0",
+        "tslint": "^5.20.0",
         "typescript": "^3.5.3",
         "typescript-json-schema": "^0.40.0"
     }

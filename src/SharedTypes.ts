@@ -42,6 +42,12 @@ export interface LoggerEventWithResponse {
     error: null;
 }
 
+export interface ProcessData {
+    pid: number;
+    title: string;
+    mainModule: string;
+}
+
 export type LoggerEvent = LoggerEventWithResponse | LoggerEventWithError;
 
 export type LoggerEventHandler = (payload: LoggerEvent) => void;

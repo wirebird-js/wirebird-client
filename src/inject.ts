@@ -1,9 +1,10 @@
 import GlobalHttpLogger from './GlobalHttpLogger';
 import eventToPretty from './eventToPretty';
 import eventToCurl from './eventToCurl';
-import { LoggerEvent } from './SharedTypes';
+import { LoggerEvent, ProcessData } from './SharedTypes';
 import axios from 'axios';
 import { serializeEvent } from './eventSerializer';
+import getProcessData from './getProcessData';
 
 const MONITOR_DEFAULT_URL = 'http://localhost:4380/api/updates';
 const DNT_HEADER = 'http-inspector-do-not-track';
@@ -23,11 +24,29 @@ const getFormatter = (format?: string) => {
     }
 };
 
+async function sendEventToMonitor(
+    uiUrl: string,
+    event: LoggerEvent,
+    processData: ProcessData
+) {
+    try {
+        await axios.post(uiUrl, serializeEvent(event, processData), {
+            headers: {
+                [DNT_HEADER]: '1'
+            }
+        });
+    } catch (e) {
+        console.error(
+            `[http-inspector] Failed to send event to ${uiUrl} ${e.message}`
+        );
+    }
+}
+
 export const main = () => {
     const {
         env: {
             HTTP_INSPECTOR: env,
-            HTTP_INSPECTOR_FORMAT: format,
+            HTTP_INSPECTOR_FORMAT: format = FORMAT_PRETTY,
             HTTP_INSPECTOR_MONITOR_URL: uiUrl = MONITOR_DEFAULT_URL
         }
     } = process;
@@ -35,6 +54,7 @@ export const main = () => {
     if (env !== 'true' && env !== 'on' && env !== '1' && env !== 'yes') {
         return;
     }
+    const processData = getProcessData();
 
     const formatter = getFormatter(format);
 
@@ -44,6 +64,7 @@ export const main = () => {
                 return true;
             }
             if (req.headers[DNT_HEADER]) {
+                // Don't log own requests
                 return false;
             }
             return true;
@@ -55,11 +76,7 @@ export const main = () => {
                 return;
             }
             if (format === FORMAT_MONITOR) {
-                axios.post(uiUrl, serializeEvent(event), {
-                    headers: {
-                        [DNT_HEADER]: '1'
-                    }
-                });
+                sendEventToMonitor(uiUrl, event, processData);
             }
         }
     });

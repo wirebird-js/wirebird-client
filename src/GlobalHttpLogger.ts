@@ -38,8 +38,7 @@ class ResponseBodyCollector {
         );
     }
 
-    private unzip(response: any): Unzip {
-        //TODO: remove any!!!
+    private unzip(response: IncomingMessage): Unzip {
         const stream = response.pipe(createUnzip());
         return stream;
     }
