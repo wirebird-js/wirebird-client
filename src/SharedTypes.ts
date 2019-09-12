@@ -47,8 +47,12 @@ export interface ProcessData {
     title: string;
     mainModule: string;
 }
+export interface MonitorMetadata {
+    processData: ProcessData;
+}
 
 export type LoggerEvent = LoggerEventWithResponse | LoggerEventWithError;
+export type MonitorEvent = LoggerEvent & MonitorMetadata;
 
 export type LoggerEventHandler = (payload: LoggerEvent) => void;
 export type LoggerShouldLog = (req: LoggerRequest) => boolean;

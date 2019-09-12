@@ -2,7 +2,7 @@ import {
     LoggerError,
     BaseLoggerRequest,
     BaseLoggerResponse,
-    ProcessData
+    MonitorMetadata
 } from './SharedTypes';
 
 export type SerializedLoggerRequest = BaseLoggerRequest<string>;
@@ -22,4 +22,5 @@ export interface SerializedLoggerEventWithResponse {
 
 export type SerializedLoggerEvent = (
     | SerializedLoggerEventWithResponse
-    | SerializedLoggerEventWithError) & { processData: ProcessData };
+    | SerializedLoggerEventWithError) &
+    MonitorMetadata;

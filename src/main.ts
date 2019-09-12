@@ -1,5 +1,5 @@
 import GlobalHttpLogger from './GlobalHttpLogger';
-import { LoggerEvent } from './SharedTypes';
+import { LoggerEvent, MonitorEvent } from './SharedTypes';
 import { SerializedLoggerEvent } from './SerializedTypes';
 
-export { GlobalHttpLogger, LoggerEvent, SerializedLoggerEvent };
+export { GlobalHttpLogger, LoggerEvent, SerializedLoggerEvent, MonitorEvent };
