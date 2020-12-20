@@ -1,9 +1,4 @@
-import {
-    LoggerEvent,
-    LoggerRequest,
-    LoggerHeaders,
-    LoggerError
-} from './SharedTypes';
+import { LoggerEvent, LoggerHeaders, LoggerError } from './SharedTypes';
 
 const LINE_SEP = '------------------------------------------------';
 
@@ -14,7 +9,7 @@ const renderHeading = ({ request, response, error }: LoggerEvent) => {
 
 const renderHeaders = (headers: LoggerHeaders) =>
     Object.keys(headers)
-        .map(name => `  ${name}: ${headers[name]}`)
+        .map((name) => `  ${name}: ${headers[name]}`)
         .join('\n');
 
 const renderBody = (headers: LoggerHeaders, body: Buffer | null) =>
@@ -24,7 +19,7 @@ const renderError = (error: LoggerError) => {
     return [
         `  Code: ${error.code}`,
         `  Message: ${error.message}`,
-        `  Stack: ${error.stack}`
+        `  Stack: ${error.stack}`,
     ].join('\n');
 };
 

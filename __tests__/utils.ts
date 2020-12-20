@@ -1,8 +1,8 @@
 import { LoggerEvent } from '../src/SharedTypes';
-const _ = require('lodash');
+import cloneDeep from 'lodash/cloneDeep';
 
 export const removeUnstableData = (input: LoggerEvent): LoggerEvent => {
-    const output = _.cloneDeep(input);
+    const output = cloneDeep(input) as any;
     if (output.request.timeStart) {
         output.request.timeStart = 1;
     }
@@ -26,11 +26,11 @@ export const removeUnstableData = (input: LoggerEvent): LoggerEvent => {
 };
 
 export const withReadableBuffers = (input: LoggerEvent): LoggerEvent => {
-    const output = _.cloneDeep(input);
-    if (output.request && output.request.body) {
+    const output = cloneDeep(input) as any;
+    if (output.request?.body) {
         output.request.body = output.request.body.toString('utf8');
     }
-    if (output.response && output.response.body) {
+    if (output.response?.body) {
         output.response.body = output.response.body.toString('utf8');
     }
     return output;

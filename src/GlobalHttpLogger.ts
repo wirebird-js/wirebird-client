@@ -1,6 +1,6 @@
 // https://github.com/Microsoft/TypeScript-Babel-Starter
 
-import http, { ClientRequest, ServerResponse, IncomingMessage } from 'http';
+import http, { ClientRequest, IncomingMessage } from 'http';
 import https from 'https';
 import {
     LoggerEvent,
@@ -9,7 +9,7 @@ import {
     LoggerResponse,
     LoggerEventHandler,
     LoggerShouldLog,
-    Timestamp
+    Timestamp,
 } from './SharedTypes';
 import { createUnzip, Unzip } from 'zlib';
 import nanoid from 'nanoid';
@@ -50,8 +50,8 @@ class ResponseBodyCollector {
             ? this.unzip(response)
             : response;
 
-        this.bodyPromise = new Promise((resolve, reject) => {
-            stream.on('data', chunk => {
+        this.bodyPromise = new Promise((resolve) => {
+            stream.on('data', (chunk) => {
                 this.buffers.push(chunk);
             });
             stream.on('end', () => {
@@ -74,27 +74,27 @@ const waitForResponseOrError = (
     responseTimeStart?: Timestamp;
     error?: Error;
 }> =>
-    new Promise((resolve, reject) => {
-        request.prependOnceListener('response', response => {
+    new Promise((resolve) => {
+        request.prependOnceListener('response', (response) => {
             const responseTimeStart = Date.now();
             const responseBodyCollector = new ResponseBodyCollector(response);
             resolve({ response, responseBodyCollector, responseTimeStart });
         });
-        request.prependOnceListener('error', error => {
+        request.prependOnceListener('error', (error) => {
             resolve({ error });
         });
     });
 
 const collectRequestBody = (request: ClientRequest): Promise<Buffer | null> =>
-    new Promise((resolve, reject) => {
+    new Promise((resolve) => {
         const requestBody: Array<Buffer> = [];
 
         const reqWrite = request.write;
-        request.write = function(...args: any) {
+        request.write = function (...args: any) {
             /**
              * chunk can be either a string or a Buffer.
              */
-            const chunk = arguments[0];
+            const chunk = args[0];
 
             if (Buffer.isBuffer(chunk)) {
                 requestBody.push(chunk);
@@ -106,11 +106,11 @@ const collectRequestBody = (request: ClientRequest): Promise<Buffer | null> =>
         };
 
         const reqEnd = request.end;
-        request.end = function(...args: any) {
+        request.end = function (...args: any) {
             /**
              * the first argument might be a callback or a chunk
              */
-            const maybeChunk = arguments[0];
+            const maybeChunk = args[0];
 
             if (Buffer.isBuffer(maybeChunk)) {
                 requestBody.push(maybeChunk);
@@ -148,7 +148,7 @@ const interceptRequest = async (
         url: `${protocol}//${host}${path}`,
         method: (request as ClientRequestWithUndocumentedMembers).method,
         headers: (request as ClientRequestWithUndocumentedMembers)._headers,
-        body: null
+        body: null,
     };
 
     if (shouldLog && !shouldLog(loggerRequest)) {
@@ -157,7 +157,7 @@ const interceptRequest = async (
 
     const [
         requestBody,
-        { response, responseBody, responseTimeStart, error }
+        { response, responseBody, responseTimeStart, error },
     ] = await Promise.all([
         collectRequestBody(request),
         (async () => {
@@ -165,51 +165,51 @@ const interceptRequest = async (
                 response,
                 responseBodyCollector,
                 responseTimeStart,
-                error
+                error,
             } = await waitForResponseOrError(request);
             if (response && responseBodyCollector) {
                 return {
                     response,
                     responseTimeStart,
                     responseBody: await responseBodyCollector.getBodyAsync(),
-                    error: null
+                    error: null,
                 };
             } else if (error) {
                 return {
                     response: null,
                     responseBody: null,
-                    error
+                    error,
                 };
             } else {
                 throw new Error('No responseBodyCollector');
             }
-        })()
+        })(),
     ]);
 
     loggerRequest.body = requestBody ? requestBody : null;
 
     if (response) {
         const loggerResponse: LoggerResponse = {
-            timeStart: responseTimeStart || 0,
-            status: response.statusCode || 0,
+            timeStart: responseTimeStart ?? 0,
+            status: response.statusCode ?? 0,
             body: responseBody ? responseBody : null,
-            headers: response.headers as LoggerHeaders
+            headers: response.headers as LoggerHeaders,
         };
         onRequestEnd({
             request: loggerRequest,
             response: loggerResponse,
-            error: null
+            error: null,
         });
     } else if (error) {
         const loggerError = {
             message: error.message,
             code: (error as any).code as string,
-            stack: error.stack || ''
+            stack: error.stack ?? '',
         };
         onRequestEnd({
             request: loggerRequest,
             response: null,
-            error: loggerError
+            error: loggerError,
         });
     }
 };
@@ -226,7 +226,7 @@ export default class GlobalHttpLogger {
         this.onRequestEnd = onRequestEnd;
         this.shouldLog = shouldLog;
     }
-    start() {
+    start(): void {
         const { onRequestEnd } = this;
         const interceptedRequestMethod = (
             object: any,
@@ -253,5 +253,4 @@ export default class GlobalHttpLogger {
             );
         }
     }
-    stop() {}
 }

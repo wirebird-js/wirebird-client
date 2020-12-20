@@ -15,12 +15,12 @@ const FORMAT_MONITOR = 'monitor';
 
 const getFormatter = (format?: string) => {
     switch (format) {
-        case FORMAT_PRETTY:
-            return eventToPretty;
-        case FORMAT_CURL:
-            return eventToCurl;
-        default:
-            return eventToPretty;
+    case FORMAT_PRETTY:
+        return eventToPretty;
+    case FORMAT_CURL:
+        return eventToCurl;
+    default:
+        return eventToPretty;
     }
 };
 
@@ -32,8 +32,8 @@ async function sendEventToMonitor(
     try {
         await axios.post(uiUrl, serializeEvent(event, processData), {
             headers: {
-                [DNT_HEADER]: '1'
-            }
+                [DNT_HEADER]: '1',
+            },
         });
     } catch (e) {
         console.error(
@@ -42,13 +42,13 @@ async function sendEventToMonitor(
     }
 }
 
-export const main = () => {
+export const main = (): void => {
     const {
         env: {
             HTTP_INSPECTOR: env,
             HTTP_INSPECTOR_FORMAT: format = FORMAT_PRETTY,
-            HTTP_INSPECTOR_MONITOR_URL: uiUrl = MONITOR_DEFAULT_URL
-        }
+            HTTP_INSPECTOR_MONITOR_URL: uiUrl = MONITOR_DEFAULT_URL,
+        },
     } = process;
 
     if (env !== 'true' && env !== 'on' && env !== '1' && env !== 'yes') {
@@ -59,7 +59,7 @@ export const main = () => {
     const formatter = getFormatter(format);
 
     const logger = new GlobalHttpLogger({
-        shouldLog: req => {
+        shouldLog: (req) => {
             if (format !== FORMAT_MONITOR) {
                 return true;
             }
@@ -78,7 +78,7 @@ export const main = () => {
             if (format === FORMAT_MONITOR) {
                 sendEventToMonitor(uiUrl, event, processData);
             }
-        }
+        },
     });
     logger.start();
 };
