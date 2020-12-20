@@ -22,7 +22,8 @@
         "start-test-server": "node ./__tests__/startServer.js",
         "test": "jest",
         "type-check": "tsc --noEmit",
-        "type-check:watch": "npm run type-check -- --watch"
+        "type-check:watch": "npm run type-check -- --watch",
+        "lint": "eslint ."
     },
     "dependencies": {
         "nanoid": "^2.1.0",
@@ -42,9 +43,11 @@
         "@types/request-promise-native": "^1.0.16",
         "@types/shell-escape": "^0.2.0",
         "@types/superagent": "^4.1.3",
-        "axios": "^0.19.0",
+        "@typescript-eslint/eslint-plugin": "^4.10.0",
+        "@typescript-eslint/parser": "^4.10.0",
+        "axios": "^0.19.2",
         "compression": "^1.7.4",
-        "eslint": "^6.0.1",
+        "eslint": "^7.16.0",
         "express": "^4.17.1",
         "jest": "^24.8.0",
         "lodash": "^4.17.15",

@@ -73,7 +73,7 @@ describe('GlobalHttpLogger', () => {
                 validateStatus: () => true
             })
         ).rejects.toThrow(
-            'getaddrinfo ENOTFOUND never.existing.host.asdfgh never.existing.host.asdfgh:80'
+            'getaddrinfo ENOTFOUND never.existing.host.asdfgh'
         );
         await skipTick();
         expect(

@@ -8,7 +8,7 @@ Object {
     "headers": Object {
       "accept": "application/json, text/plain, */*",
       "host": "127.0.0.1:13000",
-      "user-agent": "axios/0.19.0",
+      "user-agent": "axios/0.19.2",
     },
     "id": "[presents]",
     "method": "GET",
@@ -38,7 +38,7 @@ Object {
     "headers": Object {
       "accept": "application/json, text/plain, */*",
       "host": "127.0.0.1:13000",
-      "user-agent": "axios/0.19.0",
+      "user-agent": "axios/0.19.2",
     },
     "id": "[presents]",
     "method": "GET",
@@ -64,14 +64,14 @@ exports[`GlobalHttpLogger should capture GET requests with network error 1`] = `
 Object {
   "error": Object {
     "code": "ENOTFOUND",
-    "message": "getaddrinfo ENOTFOUND never.existing.host.asdfgh never.existing.host.asdfgh:80",
+    "message": "getaddrinfo ENOTFOUND never.existing.host.asdfgh",
   },
   "request": Object {
     "body": null,
     "headers": Object {
       "accept": "application/json, text/plain, */*",
       "host": "never.existing.host.asdfgh",
-      "user-agent": "axios/0.19.0",
+      "user-agent": "axios/0.19.2",
     },
     "id": "[presents]",
     "method": "GET",
@@ -92,7 +92,7 @@ Object {
       "content-length": 13,
       "content-type": "application/json;charset=utf-8",
       "host": "127.0.0.1:13000",
-      "user-agent": "axios/0.19.0",
+      "user-agent": "axios/0.19.2",
     },
     "id": "[presents]",
     "method": "POST",
@@ -123,7 +123,7 @@ Object {
       "accept": "application/json, text/plain, */*",
       "accept-encoding": "gzip",
       "host": "127.0.0.1:13000",
-      "user-agent": "axios/0.19.0",
+      "user-agent": "axios/0.19.2",
     },
     "id": "[presents]",
     "method": "GET",
