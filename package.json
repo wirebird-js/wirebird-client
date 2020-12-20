@@ -4,13 +4,13 @@
     "description": "",
     "license": "ISC",
     "author": "",
+    "main": "lib/main.js",
+    "types": "lib/src/main.d.ts",
     "files": [
         "lib",
         "inject.js",
         "README.md"
     ],
-    "main": "lib/main.js",
-    "types": "lib/src/main.d.ts",
     "scripts": {
         "build": "npm run build:types && npm run build:js && npm run build:schema",
         "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline",
@@ -19,11 +19,12 @@
         "example:curlLogger": "npm run build:js && node ./lib/examples/curlLogger.js",
         "example:inject": "npm run build:js && HTTP_INSPECTOR=1 HTTP_INSPECTOR_FORMAT=pretty node -r ./inject ./lib/examples/inject.js",
         "example:inject:monitor": "npm run build:js && HTTP_INSPECTOR=1 HTTP_INSPECTOR_FORMAT=monitor node -r ./inject ./lib/examples/inject.js",
+        "lint": "eslint .",
+        "prepublish": "npm run build",
         "start-test-server": "node ./__tests__/startServer.js",
         "test": "jest",
         "type-check": "tsc --noEmit",
-        "type-check:watch": "npm run type-check -- --watch",
-        "lint": "eslint ."
+        "type-check:watch": "npm run type-check -- --watch"
     },
     "dependencies": {
         "nanoid": "^2.1.0",
