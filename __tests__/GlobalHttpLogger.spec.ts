@@ -94,4 +94,21 @@ describe('GlobalHttpLogger', () => {
             prepareSnapshot(onRequestEnd.mock.calls[0][0])
         ).toMatchSnapshot();
     });
+
+    it('should allow multiple headers', async () => {
+        const onRequestEnd = jest.fn();
+        const logger = new GlobalHttpLogger({ onRequestEnd });
+        logger.start();
+        const res = await axios.get('http://127.0.0.1:13000/get?a=b', {
+            headers: {
+                one: ['two', 'three'],
+            },
+        });
+        expect(res.data).toEqual('Hello World!');
+        expect(res.status).toEqual(200);
+        await skipTick();
+        expect(
+            prepareSnapshot(onRequestEnd.mock.calls[0][0])
+        ).toMatchSnapshot();
+    });
 });

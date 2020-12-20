@@ -2,8 +2,10 @@ export type Timestamp = number;
 export type Uid = string;
 
 export interface LoggerHeaders {
-    [headerName: string]: string;
+    [headerName: string]: string | number | string[] | undefined;
 }
+
+export type LoggerResponseRawHeaders = string[];
 
 export interface BaseLoggerRequest<T> {
     id: Uid;
@@ -18,6 +20,7 @@ export interface BaseLoggerResponse<T> {
     timeStart: Timestamp;
     body: T | null;
     headers: LoggerHeaders;
+    rawHeaders: LoggerResponseRawHeaders;
     status: number;
 }
 

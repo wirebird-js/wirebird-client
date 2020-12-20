@@ -1,5 +1,14 @@
 import { LoggerEvent } from '../src/SharedTypes';
 import cloneDeep from 'lodash/cloneDeep';
+import chunk from 'lodash/chunk';
+import flatten from 'lodash/flatten';
+
+const removeUnstableRawHeaders = (headers: string[]): string[] =>
+    flatten(
+        chunk(headers, 2).filter(
+            ([name]) => !['date', 'etag'].includes(name.toLowerCase())
+        )
+    );
 
 export const removeUnstableData = (input: LoggerEvent): LoggerEvent => {
     const output = cloneDeep(input) as any;
@@ -16,6 +25,11 @@ export const removeUnstableData = (input: LoggerEvent): LoggerEvent => {
         }
         if (output.response.timeStart) {
             output.response.timeStart = 1;
+        }
+        if (output.response.rawHeaders) {
+            output.response.rawHeaders = removeUnstableRawHeaders(
+                output.response.rawHeaders
+            );
         }
     }
     if (output.error) {

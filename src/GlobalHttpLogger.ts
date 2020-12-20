@@ -147,7 +147,7 @@ const interceptRequest = async (
         timeStart: Date.now(),
         url: `${protocol}//${host}${path}`,
         method: (request as ClientRequestWithUndocumentedMembers).method,
-        headers: (request as ClientRequestWithUndocumentedMembers)._headers,
+        headers: request.getHeaders(),
         body: null,
     };
 
@@ -193,7 +193,8 @@ const interceptRequest = async (
             timeStart: responseTimeStart ?? 0,
             status: response.statusCode ?? 0,
             body: responseBody ? responseBody : null,
-            headers: response.headers as LoggerHeaders,
+            headers: response.headers,
+            rawHeaders: response.rawHeaders,
         };
         onRequestEnd({
             request: loggerRequest,
