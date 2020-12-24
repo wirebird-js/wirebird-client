@@ -1,6 +1,6 @@
 {
     "name": "http-inspector",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "description": "DevTools / Network for Node.js",
     "keywords": [
         "http-inspector",
