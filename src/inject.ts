@@ -5,24 +5,10 @@ import { LoggerEvent, ProcessData } from './SharedTypes';
 import axios from 'axios';
 import { serializeEvent } from './eventSerializer';
 import getProcessData from './getProcessData';
+import { getMode } from './mode';
 
-const MONITOR_DEFAULT_URL = 'http://localhost:4380/api/updates';
+const UI_ENDPOINT_PATH = '/api/updates';
 const DNT_HEADER = 'http-inspector-do-not-track';
-
-const FORMAT_PRETTY = 'pretty';
-const FORMAT_CURL = 'curl';
-const FORMAT_MONITOR = 'monitor';
-
-const getFormatter = (format?: string) => {
-    switch (format) {
-    case FORMAT_PRETTY:
-        return eventToPretty;
-    case FORMAT_CURL:
-        return eventToCurl;
-    default:
-        return eventToPretty;
-    }
-};
 
 async function sendEventToMonitor(
     uiUrl: string,
@@ -43,24 +29,17 @@ async function sendEventToMonitor(
 }
 
 export const main = (): void => {
-    const {
-        env: {
-            HTTP_INSPECTOR: env,
-            HTTP_INSPECTOR_FORMAT: format = FORMAT_PRETTY,
-            HTTP_INSPECTOR_MONITOR_URL: uiUrl = MONITOR_DEFAULT_URL,
-        },
-    } = process;
+    const mode = getMode(process.env.HTTP_INSPECTOR ?? '');
 
-    if (env !== 'true' && env !== 'on' && env !== '1' && env !== 'yes') {
+    if (mode.type === 'disabled') {
         return;
     }
-    const processData = getProcessData();
 
-    const formatter = getFormatter(format);
+    const processData = getProcessData();
 
     const logger = new GlobalHttpLogger({
         shouldLog: (req) => {
-            if (format !== FORMAT_MONITOR) {
+            if (mode.type !== 'ui') {
                 return true;
             }
             if (req.headers[DNT_HEADER]) {
@@ -70,13 +49,20 @@ export const main = (): void => {
             return true;
         },
         onRequestEnd: (event: LoggerEvent) => {
-            if (format === FORMAT_CURL || format === FORMAT_PRETTY) {
-                const logMessage = formatter(event);
-                console.log(logMessage);
+            if (mode.type === 'ui') {
+                sendEventToMonitor(
+                    `${mode.url}${UI_ENDPOINT_PATH}`,
+                    event,
+                    processData
+                );
+            }
+            if (mode.type === 'curl') {
+                console.log(eventToCurl(event));
                 return;
             }
-            if (format === FORMAT_MONITOR) {
-                sendEventToMonitor(uiUrl, event, processData);
+            if (mode.type === 'pretty') {
+                console.log(eventToPretty(event));
+                return;
             }
         },
     });
