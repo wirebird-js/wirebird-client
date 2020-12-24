@@ -1,0 +1,23 @@
+name: Test
+
+on:
+    push:
+        branches:
+            - '*'
+
+jobs:
+    publish-npm:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                node: [6, 8, 10, 12, 14]
+
+        steps:
+            - uses: actions/checkout@v2
+            - uses: actions/setup-node@v1
+              with:
+                  node-version: ${{ matrix.node }}
+                  registry-url: https://registry.npmjs.org/
+            - run: npm i
+            - run: npm run lint
+            - run: npm run test
