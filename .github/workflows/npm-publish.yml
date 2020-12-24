@@ -5,7 +5,7 @@ on:
         types: [created]
 
 jobs:
-    publish-npm:
+    lint:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
@@ -15,7 +15,33 @@ jobs:
                   registry-url: https://registry.npmjs.org/
             - run: npm i
             - run: npm run lint
+    test:
+        runs-on: ubuntu-latest
+        needs: lint
+        strategy:
+            matrix:
+                node: [8, 10, 12, 14]
+        steps:
+            - uses: actions/checkout@v2
+            - uses: actions/setup-node@v1
+              with:
+                  node-version: ${{ matrix.node }}
+                  registry-url: https://registry.npmjs.org/
+            - run: npm i
             - run: npm run test
+
+    publish-npm:
+        runs-on: ubuntu-latest
+        needs:
+            - lint
+            - test
+        steps:
+            - uses: actions/checkout@v2
+            - uses: actions/setup-node@v1
+              with:
+                  node-version: 14
+                  registry-url: https://registry.npmjs.org/
+            - run: npm i
             - run: npm publish --access=public
               env:
                   NODE_AUTH_TOKEN: ${{secrets.npm_token}}

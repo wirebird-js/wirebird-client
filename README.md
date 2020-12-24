@@ -62,3 +62,9 @@ http-inspector-ui
 ```
 
 Enable logging to `http-inspector-ui` by providing the following environment variable `HTTP_INSPECTOR=ui`.
+
+## Supported environments
+
+- **Node.js** - v8 and newer.
+
+- ~~**React Native**~~ - coming soon!

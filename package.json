@@ -2,6 +2,9 @@
     "name": "http-inspector",
     "version": "0.1.1",
     "description": "DevTools / Network for Node.js",
+    "engines": {
+        "node": ">=8"
+    },
     "keywords": [
         "http-inspector",
         "mitm",
