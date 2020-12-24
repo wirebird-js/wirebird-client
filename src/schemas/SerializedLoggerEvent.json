@@ -1,0 +1,201 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "anyOf": [
+        {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/SerializedLoggerEventWithError"
+                },
+                {
+                    "$ref": "#/definitions/MonitorMetadata"
+                }
+            ]
+        },
+        {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/SerializedLoggerEventWithResponse"
+                },
+                {
+                    "$ref": "#/definitions/MonitorMetadata"
+                }
+            ]
+        }
+    ],
+    "definitions": {
+        "LoggerError": {
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "stack": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "code",
+                "message",
+                "stack"
+            ],
+            "type": "object"
+        },
+        "LoggerHeaders": {
+            "additionalProperties": {
+                "anyOf": [
+                    {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    },
+                    {
+                        "type": [
+                            "string",
+                            "number"
+                        ]
+                    }
+                ]
+            },
+            "type": "object"
+        },
+        "MonitorMetadata": {
+            "properties": {
+                "processData": {
+                    "$ref": "#/definitions/ProcessData"
+                }
+            },
+            "required": [
+                "processData"
+            ],
+            "type": "object"
+        },
+        "ProcessData": {
+            "properties": {
+                "mainModule": {
+                    "type": "string"
+                },
+                "pid": {
+                    "type": "number"
+                },
+                "title": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "mainModule",
+                "pid",
+                "title"
+            ],
+            "type": "object"
+        },
+        "SerializedLoggerEventWithError": {
+            "properties": {
+                "error": {
+                    "$ref": "#/definitions/LoggerError"
+                },
+                "request": {
+                    "$ref": "#/definitions/SerializedLoggerRequest"
+                },
+                "response": {
+                    "type": "null"
+                }
+            },
+            "required": [
+                "error",
+                "request",
+                "response"
+            ],
+            "type": "object"
+        },
+        "SerializedLoggerEventWithResponse": {
+            "properties": {
+                "error": {
+                    "type": "null"
+                },
+                "request": {
+                    "$ref": "#/definitions/SerializedLoggerRequest"
+                },
+                "response": {
+                    "$ref": "#/definitions/SerializedLoggerResponse"
+                }
+            },
+            "required": [
+                "error",
+                "request",
+                "response"
+            ],
+            "type": "object"
+        },
+        "SerializedLoggerRequest": {
+            "properties": {
+                "body": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                },
+                "headers": {
+                    "$ref": "#/definitions/LoggerHeaders"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "method": {
+                    "type": "string"
+                },
+                "timeStart": {
+                    "type": "number"
+                },
+                "url": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "body",
+                "headers",
+                "id",
+                "method",
+                "timeStart",
+                "url"
+            ],
+            "type": "object"
+        },
+        "SerializedLoggerResponse": {
+            "properties": {
+                "body": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                },
+                "headers": {
+                    "$ref": "#/definitions/LoggerHeaders"
+                },
+                "rawHeaders": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "status": {
+                    "type": "number"
+                },
+                "timeStart": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "body",
+                "headers",
+                "rawHeaders",
+                "status",
+                "timeStart"
+            ],
+            "type": "object"
+        }
+    }
+}
+

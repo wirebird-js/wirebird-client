@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`validate should be a correctly serialized event 1`] = `
+Object {
+  "error": null,
+  "processData": Object {
+    "mainModule": "index.js",
+    "pid": 1,
+    "title": "node",
+  },
+  "request": Object {
+    "body": "aGVsbG8gd29ybGQ=",
+    "headers": Object {
+      "hello": "world",
+    },
+    "id": "1",
+    "method": "GET",
+    "timeStart": 0,
+    "url": "https://example.com",
+  },
+  "response": Object {
+    "body": "aGVsbG8gd29ybGQ=",
+    "headers": Object {
+      "hello": "world",
+    },
+    "rawHeaders": Array [
+      "Hello",
+      "world",
+    ],
+    "status": 200,
+    "timeStart": 0,
+  },
+}
+`;
+
+exports[`validate should validate an incorrect event 1`] = `
+Array [
+  Object {
+    "message": "does not match allOf schema <#/definitions/SerializedLoggerEventWithError> with 3 error[s]:",
+    "property": "instance",
+  },
+  Object {
+    "message": "is not of a type(s) object",
+    "property": "instance.error",
+  },
+  Object {
+    "message": "is not of a type(s) string",
+    "property": "instance.request.url",
+  },
+  Object {
+    "message": "is not of a type(s) null",
+    "property": "instance.response",
+  },
+  Object {
+    "message": "does not match allOf schema <#/definitions/SerializedLoggerEventWithResponse> with 1 error[s]:",
+    "property": "instance",
+  },
+  Object {
+    "message": "is not of a type(s) string",
+    "property": "instance.request.url",
+  },
+  Object {
+    "message": "is not any of [subschema 0],[subschema 1]",
+    "property": "instance",
+  },
+]
+`;
