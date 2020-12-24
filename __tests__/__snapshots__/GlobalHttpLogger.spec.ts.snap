@@ -132,23 +132,16 @@ Object {
 
 exports[`GlobalHttpLogger should capture GET requests with network error 1`] = `
 Object {
-  "error": Object {
-    "code": "ENOTFOUND",
-    "message": "getaddrinfo ENOTFOUND never.existing.host.asdfgh",
+  "body": null,
+  "headers": Object {
+    "accept": "application/json, text/plain, */*",
+    "host": "never.existing.host.asdfgh",
+    "user-agent": "axios/0.19.2",
   },
-  "request": Object {
-    "body": null,
-    "headers": Object {
-      "accept": "application/json, text/plain, */*",
-      "host": "never.existing.host.asdfgh",
-      "user-agent": "axios/0.19.2",
-    },
-    "id": "[presents]",
-    "method": "GET",
-    "timeStart": 1,
-    "url": "http://never.existing.host.asdfgh/",
-  },
-  "response": null,
+  "id": "[presents]",
+  "method": "GET",
+  "timeStart": 1,
+  "url": "http://never.existing.host.asdfgh/",
 }
 `;
 

@@ -73,9 +73,14 @@ describe('GlobalHttpLogger', () => {
             })
         ).rejects.toThrow('getaddrinfo ENOTFOUND never.existing.host.asdfgh');
         await skipTick();
-        expect(
-            prepareSnapshot(onRequestEnd.mock.calls[0][0])
-        ).toMatchSnapshot();
+        const event = prepareSnapshot(onRequestEnd.mock.calls[0][0]);
+        expect(event.request).toMatchSnapshot();
+        expect(event.response).toEqual(null);
+        expect(event.error?.code).toEqual('ENOTFOUND');
+        expect([
+            'getaddrinfo ENOTFOUND never.existing.host.asdfgh',
+            'getaddrinfo ENOTFOUND never.existing.host.asdfgh never.existing.host.asdfgh:80',
+        ]).toContain(event.error?.message);
     });
 
     it('should decode gzipped content', async () => {
