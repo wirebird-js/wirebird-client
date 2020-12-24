@@ -28,10 +28,10 @@ You can leave this code in producion, because `http-inspector` is disabled by de
 
 In development mode, if you want to enable logging, your process should be run with `HTTP_INSPECTOR` environment variable set to one of the following values:
 
--   `HTTP_HTTP_INSPECTOR=pretty` - output requests to console
--   `HTTP_HTTP_INSPECTOR=curl` - output requests as curl commands
--   `HTTP_HTTP_INSPECTOR=ui` - send requests to [http-inspector-ui](https://npmjs.com/package/http-inspector-ui) at the default address `http://localhost:4380`
--   `HTTP_HTTP_INSPECTOR=ui:http://http-inspector-ui-host:1234` - send requests to [http-inspector-ui](https://npmjs.com/package/http-inspector-ui) at the address specified
+-   `HTTP_INSPECTOR=pretty` - output requests to console
+-   `HTTP_INSPECTOR=curl` - output requests as curl commands
+-   `HTTP_INSPECTOR=ui` - send requests to [http-inspector-ui](https://npmjs.com/package/http-inspector-ui) at the default address `http://localhost:4380`
+-   `HTTP_INSPECTOR=ui:http://http-inspector-ui-host:1234` - send requests to [http-inspector-ui](https://npmjs.com/package/http-inspector-ui) at the address specified
 
 ### Using `http-inspector-ui`
 
@@ -45,4 +45,4 @@ npm i -g http-inspector-ui
 http-inspector-ui
 ```
 
-Enable logging to `http-inspector-ui` by providing the following environment variable `HTTP_HTTP_INSPECTOR=ui`.
+Enable logging to `http-inspector-ui` by providing the following environment variable `HTTP_INSPECTOR=ui`.

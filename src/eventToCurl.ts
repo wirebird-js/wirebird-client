@@ -3,7 +3,7 @@ import escape from 'shell-escape';
 
 export default function eventToCurl(event: LoggerEvent): string {
     const { request } = event;
-    const chunks: Array<string> = [];
+    const chunks: string[] = [];
     chunks.push('curl');
     chunks.push(request.url);
     chunks.push('-X');

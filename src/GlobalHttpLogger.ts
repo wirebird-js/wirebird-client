@@ -1,18 +1,15 @@
-// https://github.com/Microsoft/TypeScript-Babel-Starter
-
 import http, { ClientRequest, IncomingMessage } from 'http';
 import https from 'https';
+import nanoid from 'nanoid';
+import { createUnzip, Unzip } from 'zlib';
 import {
     LoggerEvent,
-    LoggerHeaders,
+    LoggerEventHandler,
     LoggerRequest,
     LoggerResponse,
-    LoggerEventHandler,
     LoggerShouldLog,
     Timestamp,
 } from './SharedTypes';
-import { createUnzip, Unzip } from 'zlib';
-import nanoid from 'nanoid';
 
 const matches = process.version.match(/^v(\d+)\.(\d+)\.(\d+)$/);
 const nodeMajorVersion = matches ? +matches[1] : 0;
@@ -24,7 +21,7 @@ interface ClientRequestWithUndocumentedMembers extends ClientRequest {
 }
 
 class ResponseBodyCollector {
-    buffers: Array<Buffer>;
+    buffers: Buffer[];
 
     bodyPromise: Promise<Buffer>;
 
@@ -52,7 +49,11 @@ class ResponseBodyCollector {
 
         this.bodyPromise = new Promise((resolve) => {
             stream.on('data', (chunk) => {
-                this.buffers.push(chunk);
+                if (typeof chunk === 'string') {
+                    this.buffers.push(new Buffer(chunk, 'utf8'));
+                } else {
+                    this.buffers.push(chunk);
+                }
             });
             stream.on('end', () => {
                 const body = Buffer.concat(this.buffers);
@@ -87,7 +88,7 @@ const waitForResponseOrError = (
 
 const collectRequestBody = (request: ClientRequest): Promise<Buffer | null> =>
     new Promise((resolve) => {
-        const requestBody: Array<Buffer> = [];
+        const requestBody: Buffer[] = [];
 
         const reqWrite = request.write;
         request.write = function (...args: any) {
