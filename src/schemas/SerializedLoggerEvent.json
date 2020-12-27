@@ -146,6 +146,12 @@
                 "method": {
                     "type": "string"
                 },
+                "remoteAddress": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                },
                 "timeStart": {
                     "type": "number"
                 },
@@ -158,6 +164,7 @@
                 "headers",
                 "id",
                 "method",
+                "remoteAddress",
                 "timeStart",
                 "url"
             ],
