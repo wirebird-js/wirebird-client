@@ -11,9 +11,10 @@ describe('validate', () => {
             headers: {
                 hello: 'world',
             },
-            method   : 'GET',
-            timeStart: 0,
-            url      : 'https://example.com',
+            method       : 'GET',
+            timeStart    : 0,
+            remoteAddress: '127.0.0.1',
+            url          : 'https://example.com',
         },
         response: {
             body   : new Buffer('hello world', 'utf8'),
