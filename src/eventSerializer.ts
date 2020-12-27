@@ -19,18 +19,18 @@ export const serializeEvent = (
 ): SerializedLoggerEvent => {
     if (event.response) {
         return {
-            request: serializeBody(event.request),
+            request : serializeBody(event.request),
             response: serializeBody(event.response),
-            error: null,
+            error   : null,
             processData
         };
     }
 
     if (event.error) {
         return {
-            request: serializeBody(event.request),
+            request : serializeBody(event.request),
             response: null,
-            error: event.error,
+            error   : event.error,
             processData
         };
     }

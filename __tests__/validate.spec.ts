@@ -6,31 +6,31 @@ import { validate } from '../src/validate';
 describe('validate', () => {
     const event: LoggerEvent = {
         request: {
-            id: '1',
-            body: new Buffer('hello world', 'utf8'),
+            id     : '1',
+            body   : new Buffer('hello world', 'utf8'),
             headers: {
                 hello: 'world',
             },
-            method: 'GET',
+            method   : 'GET',
             timeStart: 0,
-            url: 'https://example.com',
+            url      : 'https://example.com',
         },
         response: {
-            body: new Buffer('hello world', 'utf8'),
+            body   : new Buffer('hello world', 'utf8'),
             headers: {
                 hello: 'world',
             },
             rawHeaders: ['Hello', 'world'],
-            status: 200,
-            timeStart: 0,
+            status    : 200,
+            timeStart : 0,
         },
         error: null,
     };
 
     const processData: ProcessData = {
         mainModule: 'index.js',
-        pid: 1,
-        title: 'node',
+        pid       : 1,
+        title     : 'node',
     };
     const serializedEvent = serializeEvent(event, processData);
 
@@ -53,7 +53,7 @@ describe('validate', () => {
         });
         expect(
             res.errors.map((e) => ({
-                message: e.message,
+                message : e.message,
                 property: e.property,
             }))
         ).toMatchSnapshot();

@@ -1,3 +1,4 @@
+import { Socket } from 'net';
 import http, { ClientRequest, IncomingMessage } from 'http';
 import https from 'https';
 import nanoid from 'nanoid';
@@ -66,6 +67,19 @@ class ResponseBodyCollector {
         return this.bodyPromise;
     }
 }
+
+const waitForRequestRemoteAddress = (
+    request: ClientRequest
+): Promise<[string | null, 'error' | 'close' | 'connect']> =>
+    new Promise((resolve) => {
+        request.prependOnceListener('socket', (socket) => {
+            socket.on('connect', () =>
+                resolve([socket.remoteAddress ?? null, 'connect'])
+            );
+            socket.on('error', () => resolve([null, 'error']));
+            socket.on('close', () => resolve([null, 'close']));
+        });
+    });
 
 const waitForResponseOrError = (
     request: ClientRequest
@@ -144,12 +158,13 @@ const interceptRequest = async (
     const path = request.path;
 
     const loggerRequest: LoggerRequest = {
-        id: nanoid(),
-        timeStart: Date.now(),
-        url: `${protocol}//${host}${path}`,
-        method: (request as ClientRequestWithUndocumentedMembers).method,
-        headers: request.getHeaders(),
-        body: null,
+        id           : nanoid(),
+        timeStart    : Date.now(),
+        url          : `${protocol}//${host}${path}`,
+        method       : (request as ClientRequestWithUndocumentedMembers).method,
+        headers      : request.getHeaders(),
+        body         : null,
+        remoteAddress: null,
     };
 
     if (shouldLog && !shouldLog(loggerRequest)) {
@@ -157,9 +172,11 @@ const interceptRequest = async (
     }
 
     const [
+        [remoteAddress, reason],
         requestBody,
         { response, responseBody, responseTimeStart, error },
     ] = await Promise.all([
+        waitForRequestRemoteAddress(request),
         collectRequestBody(request),
         (async () => {
             const {
@@ -173,11 +190,11 @@ const interceptRequest = async (
                     response,
                     responseTimeStart,
                     responseBody: await responseBodyCollector.getBodyAsync(),
-                    error: null,
+                    error       : null,
                 };
             } else if (error) {
                 return {
-                    response: null,
+                    response    : null,
                     responseBody: null,
                     error,
                 };
@@ -186,32 +203,32 @@ const interceptRequest = async (
             }
         })(),
     ]);
-
-    loggerRequest.body = requestBody ? requestBody : null;
+    loggerRequest.body = requestBody ?? null;
+    loggerRequest.remoteAddress = remoteAddress;
 
     if (response) {
         const loggerResponse: LoggerResponse = {
-            timeStart: responseTimeStart ?? 0,
-            status: response.statusCode ?? 0,
-            body: responseBody ? responseBody : null,
-            headers: response.headers,
+            timeStart : responseTimeStart ?? 0,
+            status    : response.statusCode ?? 0,
+            body      : responseBody ?? null,
+            headers   : response.headers,
             rawHeaders: response.rawHeaders,
         };
         onRequestEnd({
-            request: loggerRequest,
+            request : loggerRequest,
             response: loggerResponse,
-            error: null,
+            error   : null,
         });
     } else if (error) {
         const loggerError = {
             message: error.message,
-            code: (error as any).code as string,
-            stack: error.stack ?? '',
+            code   : (error as any).code as string,
+            stack  : error.stack ?? '',
         };
         onRequestEnd({
-            request: loggerRequest,
+            request : loggerRequest,
             response: null,
-            error: loggerError,
+            error   : loggerError,
         });
     }
 };

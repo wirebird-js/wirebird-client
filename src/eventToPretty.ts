@@ -4,7 +4,9 @@ const LINE_SEP = '------------------------------------------------';
 
 const renderHeading = ({ request, response, error }: LoggerEvent) => {
     const statusLine = response ? response.status : error ? error.message : '';
-    return `${request.method} ${request.url}\n > ${statusLine}`;
+    return `${request.method} ${request.url}\n${
+        request.remoteAddress ?? 'IP unknown'
+    }\n > ${statusLine}`;
 };
 
 const renderHeaders = (headers: LoggerHeaders) =>

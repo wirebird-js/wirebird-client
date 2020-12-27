@@ -17,21 +17,21 @@ describe('getMode', () => {
         const m = getMode('ui');
         expect(m).toEqual(<Mode>{
             type: 'ui',
-            url: 'http://localhost:4380',
+            url : 'http://localhost:4380',
         });
     });
     it('should parse ui mode with a colon', () => {
         const m = getMode('ui:');
         expect(m).toEqual(<Mode>{
             type: 'ui',
-            url: 'http://localhost:4380',
+            url : 'http://localhost:4380',
         });
     });
     it('should parse ui mode with URL provided', () => {
         const m = getMode('ui:https://example.com:2000');
         expect(m).toEqual(<Mode>{
             type: 'ui',
-            url: 'https://example.com:2000',
+            url : 'https://example.com:2000',
         });
     });
     it('should parse empty as disabled', () => {

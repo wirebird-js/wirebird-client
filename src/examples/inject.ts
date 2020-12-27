@@ -13,13 +13,14 @@ const main = async () => {
         .end();
     await request({
         method: 'post',
-        uri: 'https://httpbin.org/post',
-        json: true,
-        body: { hello: 'request' }
+        uri   : 'https://httpbin.org/post',
+        json  : true,
+        body  : { hello: 'request' },
     });
+    await axios.get('https://non-existing.oewihfw3oeihfoiwe78hfo.com');
 };
 
-main().catch(e => {
+main().catch((e) => {
     console.error(e.stack);
     process.exit(1);
 });

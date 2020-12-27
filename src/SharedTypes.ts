@@ -14,6 +14,7 @@ export interface BaseLoggerRequest<T> {
     body: T | null;
     headers: LoggerHeaders;
     method: string;
+    remoteAddress: string | null;
 }
 
 export interface BaseLoggerResponse<T> {

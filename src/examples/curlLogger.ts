@@ -16,9 +16,9 @@ const main = async () => {
         .end();
     await request({
         method: 'post',
-        uri: 'https://httpbin.org/post',
-        json: true,
-        body: { hello: 'request' }
+        uri   : 'https://httpbin.org/post',
+        json  : true,
+        body  : { hello: 'request' }
     });
 };
 

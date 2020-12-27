@@ -21,14 +21,14 @@ export const getMode = (envStr: string): Mode => {
     if (envStr === 'ui') {
         return {
             type: 'ui',
-            url: defaultURL,
+            url : defaultURL,
         };
     }
 
     if (envStr.startsWith(uiPrefix)) {
         return {
             type: 'ui',
-            url: envStr.substr(uiPrefix.length) || defaultURL,
+            url : envStr.substr(uiPrefix.length) || defaultURL,
         };
     }
     return {
