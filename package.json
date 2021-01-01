@@ -36,6 +36,7 @@
         "prepublish": "npm run build",
         "start-test-server": "node ./__tests__/startServer.js",
         "test": "jest",
+        "tester": "HTTP_INSPECTOR=ui node tester.js",
         "type-check": "tsc --noEmit",
         "type-check:watch": "npm run type-check -- --watch"
     },
