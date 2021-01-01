@@ -1,8 +1,8 @@
-import { Socket } from 'net';
 import http, { ClientRequest, IncomingMessage } from 'http';
 import https from 'https';
 import nanoid from 'nanoid';
 import { createUnzip, Unzip } from 'zlib';
+import { fixHeaders } from './fixHeaders';
 import {
     LoggerEvent,
     LoggerEventHandler,
@@ -70,14 +70,12 @@ class ResponseBodyCollector {
 
 const waitForRequestRemoteAddress = (
     request: ClientRequest
-): Promise<[string | null, 'error' | 'close' | 'connect']> =>
+): Promise<string | null> =>
     new Promise((resolve) => {
         request.prependOnceListener('socket', (socket) => {
-            socket.on('connect', () =>
-                resolve([socket.remoteAddress ?? null, 'connect'])
-            );
-            socket.on('error', () => resolve([null, 'error']));
-            socket.on('close', () => resolve([null, 'close']));
+            socket.on('connect', () => resolve(socket.remoteAddress ?? null));
+            socket.on('error', () => resolve(null));
+            socket.on('close', () => resolve(null));
         });
     });
 
@@ -162,7 +160,7 @@ const interceptRequest = async (
         timeStart    : Date.now(),
         url          : `${protocol}//${host}${path}`,
         method       : (request as ClientRequestWithUndocumentedMembers).method,
-        headers      : request.getHeaders(),
+        headers      : fixHeaders(request.getHeaders()),
         body         : null,
         remoteAddress: null,
     };
@@ -172,7 +170,7 @@ const interceptRequest = async (
     }
 
     const [
-        [remoteAddress, reason],
+        remoteAddress,
         requestBody,
         { response, responseBody, responseTimeStart, error },
     ] = await Promise.all([
