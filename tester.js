@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 require('./lib/inject');
 const Axios = require('axios');
 const qs = require('querystring');
