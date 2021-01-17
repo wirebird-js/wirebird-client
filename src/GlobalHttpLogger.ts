@@ -107,7 +107,7 @@ const collectRequestBody = (request: ClientRequest): Promise<Buffer | null> =>
             /**
              * chunk can be either a string or a Buffer.
              */
-            const chunk = args[0];
+            const [chunk] = args;
 
             if (Buffer.isBuffer(chunk)) {
                 requestBody.push(chunk);
@@ -123,7 +123,7 @@ const collectRequestBody = (request: ClientRequest): Promise<Buffer | null> =>
             /**
              * the first argument might be a callback or a chunk
              */
-            const maybeChunk = args[0];
+            const [maybeChunk] = args;
 
             if (Buffer.isBuffer(maybeChunk)) {
                 requestBody.push(maybeChunk);
@@ -150,10 +150,11 @@ const interceptRequest = async (
     onRequestEnd: (payload: LoggerEvent) => void,
     shouldLog?: LoggerShouldLog
 ) => {
-    const protocol = (request as ClientRequestWithUndocumentedMembers).agent
-        .protocol;
+    const {
+        protocol,
+    } = (request as ClientRequestWithUndocumentedMembers).agent;
     const host = request.getHeader('host');
-    const path = request.path;
+    const { path } = request;
 
     const loggerRequest: LoggerRequest = {
         id           : nanoid(),
