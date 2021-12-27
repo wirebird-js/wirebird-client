@@ -69,6 +69,7 @@
         "express": "^4.17.1",
         "jest": "^24.8.0",
         "lodash": "^4.17.15",
+        "prettier": "^2.5.1",
         "request-promise-native": "^1.0.7",
         "sleep-promise": "^8.0.1",
         "superagent": "^5.1.0",
