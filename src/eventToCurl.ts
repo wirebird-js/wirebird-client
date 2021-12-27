@@ -1,26 +1,31 @@
 import { LoggerEvent } from './SharedTypes';
 import escape from 'shell-escape';
 
-export default function eventToCurl(event: LoggerEvent): string {
+interface EventToCurlOptions {
+    prettyPrint?: boolean;
+}
+
+export default function eventToCurl(
+    event: LoggerEvent,
+    { prettyPrint = false }: EventToCurlOptions = {}
+): string {
     const { request } = event;
-    const chunks: string[] = [];
-    chunks.push('curl');
-    chunks.push(request.url);
-    chunks.push('-X');
-    chunks.push(request.method);
+    const lines: string[][] = [];
+    lines.push(['curl', request.url]);
+    lines.push(['-X', request.method]);
 
     for (const [key, value] of Object.entries(request.headers)) {
-        chunks.push('-H');
-
-        chunks.push(`${key}: ${value}`);
+        lines.push(['-H', `${key}: ${value}`]);
     }
 
     if (request.body) {
-        chunks.push('--data-binary');
-        chunks.push(request.body.toString('utf8'));
+        lines.push(['--data-binary', request.body.toString('utf8')]);
     }
 
-    chunks.push('--compressed');
-    chunks.push('-i');
-    return escape(chunks);
+    lines.push(['--compressed']);
+    lines.push(['-i']);
+
+    const separator = prettyPrint ? ' \\\n' : ' ';
+
+    return lines.map((line) => escape(line)).join(separator);
 }
