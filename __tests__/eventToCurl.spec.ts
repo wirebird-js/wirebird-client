@@ -30,7 +30,7 @@ describe('eventToCurl', () => {
 
     it('should serialize a request as a pretty-printed command', () => {
         expect(eventToCurl(mockEvent, { prettyPrint: true })).toEqual(
-            `curl \'http://127.0.0.1:8080/test/endpoint\' \\
+            `curl 'http://127.0.0.1:8080/test/endpoint' \\
 -X PUT \\
 -H 'foo: bar' \\
 --data-binary hello \\
