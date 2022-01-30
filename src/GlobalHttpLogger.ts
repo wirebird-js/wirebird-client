@@ -1,6 +1,6 @@
 import http, { ClientRequest, IncomingMessage } from 'http';
 import https from 'https';
-import nanoid from 'nanoid';
+import hyperid from 'hyperid';
 import { createUnzip, Unzip } from 'zlib';
 import { fixHeaders } from './fixHeaders';
 import {
@@ -11,6 +11,8 @@ import {
     LoggerShouldLog,
     Timestamp,
 } from './SharedTypes';
+
+const uuid = hyperid();
 
 const matches = process.version.match(/^v(\d+)\.(\d+)\.(\d+)$/);
 const nodeMajorVersion = matches ? +matches[1] : 0;
@@ -150,14 +152,13 @@ const interceptRequest = async (
     onRequestEnd: (payload: LoggerEvent) => void,
     shouldLog?: LoggerShouldLog
 ) => {
-    const {
-        protocol,
-    } = (request as ClientRequestWithUndocumentedMembers).agent;
+    const { protocol } = (request as ClientRequestWithUndocumentedMembers)
+        .agent;
     const host = request.getHeader('host');
     const { path } = request;
 
     const loggerRequest: LoggerRequest = {
-        id           : nanoid(),
+        id           : uuid(),
         timeStart    : Date.now(),
         url          : `${protocol}//${host}${path}`,
         method       : (request as ClientRequestWithUndocumentedMembers).method,
