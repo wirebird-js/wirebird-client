@@ -1,5 +1,5 @@
 {
-    "name": "http-inspector",
+    "name": "wirebird-client",
     "version": "0.1.11",
     "description": "DevTools / Network for Node.js",
     "keywords": [
@@ -29,14 +29,14 @@
         "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline --copy-files",
         "build:types": "tsc --emitDeclarationOnly",
         "example:curlLogger": "npm run build:js && node ./lib/examples/curlLogger.js",
-        "example:inject": "npm run build:js && HTTP_INSPECTOR=pretty node -r ./inject ./lib/examples/inject.js",
-        "example:inject:monitor": "npm run build:js && HTTP_INSPECTOR=ui node -r ./inject ./lib/examples/inject.js",
+        "example:inject": "npm run build:js && WIREBIRD=pretty node -r ./inject ./lib/examples/inject.js",
+        "example:inject:monitor": "npm run build:js && WIREBIRD=ui node -r ./inject ./lib/examples/inject.js",
         "generate:schema": "mkdir -p src/schemas && typescript-json-schema --strictNullChecks --required src/SerializedTypes.ts SerializedLoggerEvent > src/schemas/SerializedLoggerEvent.json",
         "lint": "eslint .",
         "prepublish": "npm run build",
         "start-test-server": "node ./__tests__/startServer.js",
         "test": "jest",
-        "tester": "HTTP_INSPECTOR=ui node tester.js",
+        "tester": "WIREBIRD=ui node tester.js",
         "type-check": "tsc --noEmit",
         "type-check:watch": "npm run type-check -- --watch"
     },

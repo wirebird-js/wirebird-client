@@ -10,12 +10,12 @@ describe('GlobalHttpLogger', () => {
         const onRequestEnd = jest.fn();
         const logger = new GlobalHttpLogger({
             onRequestEnd,
-            shouldLog: (req) => !req.headers['x-http-inspector-do-not-track'],
+            shouldLog: (req) => !req.headers['x-do-not-track'],
         });
         logger.start();
         const res = await axios.get('http://127.0.0.1:13000/get?a=b', {
             headers: {
-                'x-http-inspector-do-not-track': '1',
+                'x-do-not-track': '1',
             },
         });
         expect(res.data).toEqual('Hello World!');
