@@ -23,7 +23,9 @@ async function sendEventToMonitor(
         });
     } catch (e) {
         console.error(
-            `[wirebird] Failed to send event to ${uiUrl} ${e.message}`
+            `[wirebird] Failed to send event to ${uiUrl} ${
+                (e as Error).message
+            }`
         );
     }
 }
