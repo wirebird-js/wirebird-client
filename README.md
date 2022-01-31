@@ -12,34 +12,21 @@ Wirebird is a DevTools/Network for Node.js. It offers a simple CLI interface and
 
 ### Adding to your project
 
-First of all you should install `wirebird-client` as dependency in the project you want to inspect.
+First of all you should install `wirebird-client` as a development dependency in the project you want to inspect.
 
 ```sh
 npm i -D wirebird-client
 ```
 
-Then you need to change your project's sources in order to `require()` the library on the top of your main script:
-
-```js
-require('wirebird-client/inject');
-```
-
-It will patch the original Node.js `http` module so that all outgoing requests would be intercepted.
-
-You can leave this line of code in producion, because `wirebird-client` is disabled by default.
-
-Also, if you don't want to change the source, and you run your script using `node` command, you can change:
+Start your server with the following command:
 
 ```sh
-node my-server.js
+NODE_OPTIONS='--require "wirebird-client/inject"' WIREBIRD=ui <command to start server>
 ```
 
-to:
+, where `<command to start server>` is a command which you used to start your server: `npm start`, `next start`, `gatsby develop`, `node ./index.js`, 'ts-node ./index.ts', etc
 
-```sh
-WIREBIRD=ui node -r 'wirebird-client/inject' my-server.js
-```
-
+It will patch the original Node.js `http` module so that all outgoing requests would be intercepted and sent to the globally installed Wirebird.
 
 In development mode, if you want to enable logging, your process should be run with `WIREBIRD` environment variable set to one of the following values:
 
