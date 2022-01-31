@@ -24,7 +24,7 @@ Start your server with the following command:
 NODE_OPTIONS='--require "wirebird-client/inject"' WIREBIRD=ui <command to start server>
 ```
 
-, where `<command to start server>` is a command which you used to start your server: `npm start`, `next start`, `gatsby develop`, `node ./index.js`, 'ts-node ./index.ts', etc
+, where `<command to start server>` is a command which you used to start your server: `npm start`, `next start`, `gatsby develop`, `node ./index.js`, `ts-node ./index.ts`, etc
 
 It will patch the original Node.js `http` module so that all outgoing requests would be intercepted and sent to the globally installed Wirebird.
 
