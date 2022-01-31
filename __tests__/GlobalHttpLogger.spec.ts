@@ -106,6 +106,8 @@ describe('GlobalHttpLogger', () => {
         logger.start();
         const res = await axios.get('http://127.0.0.1:13000/get?a=b', {
             headers: {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                //@ts-ignore
                 one: ['two', 'three'],
             },
         });
