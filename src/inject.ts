@@ -31,7 +31,12 @@ async function sendEventToMonitor(
 }
 
 export const main = (): void => {
-    const mode = getMode(process.env.WIREBIRD ?? '');
+    const env =
+        process.env.WIREBIRD ??
+        //HTTP_INSPECTOR name is left for the backwards compatibility
+        process.env.HTTP_INSPECTOR ??
+        '';
+    const mode = getMode(env);
 
     if (mode.type === 'disabled') {
         return;
