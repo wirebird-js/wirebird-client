@@ -1,6 +1,6 @@
 {
     "name": "wirebird-client",
-    "version": "0.1.11",
+    "version": "0.2.0",
     "description": "DevTools / Network for Node.js",
     "keywords": [
         "http-inspector",
