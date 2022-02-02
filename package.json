@@ -15,6 +15,10 @@
         "debugger",
         "network debugger"
     ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/wirebird-js/wirebird-client"
+    },
     "license": "WTFPL",
     "author": "corporateanon <corporateanon@gmail.com>",
     "main": "lib/main.js",
