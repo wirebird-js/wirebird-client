@@ -8,7 +8,7 @@ import getProcessData from './getProcessData';
 import { getMode } from './mode';
 
 const UI_ENDPOINT_PATH = '/api/updates';
-const DNT_HEADER = 'http-inspector-do-not-track';
+const DNT_HEADER = 'wirebird-do-not-track';
 
 async function sendEventToMonitor(
     uiUrl: string,
@@ -23,13 +23,20 @@ async function sendEventToMonitor(
         });
     } catch (e) {
         console.error(
-            `[http-inspector] Failed to send event to ${uiUrl} ${e.message}`
+            `[wirebird] Failed to send event to ${uiUrl} ${
+                (e as Error).message
+            }`
         );
     }
 }
 
 export const main = (): void => {
-    const mode = getMode(process.env.HTTP_INSPECTOR ?? '');
+    const env =
+        process.env.WIREBIRD ??
+        //HTTP_INSPECTOR name is left for the backwards compatibility
+        process.env.HTTP_INSPECTOR ??
+        '';
+    const mode = getMode(env);
 
     if (mode.type === 'disabled') {
         return;
