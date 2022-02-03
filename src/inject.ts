@@ -42,6 +42,8 @@ export const main = (): void => {
         return;
     }
 
+    console.error('[wirebird] 🐤 Attached');
+
     const processData = getProcessData();
 
     const logger = new GlobalHttpLogger({
