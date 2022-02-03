@@ -1,3 +1,5 @@
+import { WIREBIRD_DEFAULT_HOST } from './constants';
+
 interface ModeSimple {
     type: 'curl' | 'pretty' | 'disabled';
 }
@@ -15,7 +17,7 @@ export const getMode = (envStr: string): Mode => {
         return { type: 'pretty' };
     }
 
-    const defaultURL = 'http://localhost:4380';
+    const defaultURL = WIREBIRD_DEFAULT_HOST;
     const uiPrefix = 'ui:';
 
     if (envStr === 'ui') {
