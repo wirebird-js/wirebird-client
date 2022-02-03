@@ -48,6 +48,7 @@
         "type-check:watch": "npm run type-check -- --watch"
     },
     "dependencies": {
+        "dedent": "^0.7.0",
         "hyperid": "^3.0.0",
         "jsonschema": "^1.4.0",
         "minimist": "^1.2.5",
@@ -63,7 +64,8 @@
         "@babel/plugin-proposal-object-rest-spread": "^7.5.5",
         "@babel/preset-env": "^7.5.5",
         "@babel/preset-typescript": "^7.3.3",
-        "@types/jest": "^24.0.15",
+        "@types/dedent": "^0.7.0",
+        "@types/jest": "^27.4.0",
         "@types/lodash": "^4.14.165",
         "@types/minimist": "^1.2.2",
         "@types/nanoid": "^2.0.0",
@@ -76,7 +78,7 @@
         "compression": "^1.7.4",
         "eslint": "^7.16.0",
         "express": "^4.17.1",
-        "jest": "^24.8.0",
+        "jest": "^27.4.7",
         "lodash": "^4.17.15",
         "prettier": "^2.5.1",
         "request-promise-native": "^1.0.7",

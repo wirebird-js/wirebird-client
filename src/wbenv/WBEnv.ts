@@ -1,10 +1,11 @@
+import dedent from 'dedent';
 import minimist from 'minimist';
 import { ISpawn } from './types';
 
 export class WBEnv {
     private spawn(command: string, args: string[], env: string) {
         const oldNodeOptions = this.processEnv.NODE_OPTIONS ?? '';
-        const wirebirdClientInject = require.resolve('../inject');
+        const wirebirdClientInject = this.injectScriptPath;
         const nodeOptions =
             `${oldNodeOptions} --require ${wirebirdClientInject}`.trimStart();
 
@@ -14,8 +15,7 @@ export class WBEnv {
             .join(' ');
         const argsForLog = args.join(' ');
 
-        //TODO: stderr
-        console.log('[wbenv]', `${envsForLog} ${command} ${argsForLog}`);
+        process.stderr.write(`[wbenv] ${envsForLog} ${command} ${argsForLog}`);
 
         this.childProcessSpawn(command, args, {
             stdio: 'inherit',
@@ -27,26 +27,44 @@ export class WBEnv {
         });
     }
 
-    private parse(argv: string[]) {
-        const opts = minimist(argv, { '--': true });
+    private parse(argv: string[]): number {
+        const opts = minimist(argv, { stopEarly: true });
         const host = opts.h;
-        const [env, command, ...args] = opts['_'];
-        const rest = opts['--'] ?? [];
-        const fullArgs = [...args, ...rest];
+        const [first] = opts._;
+        const envPassed = ['ui', 'curl', 'pretty'].includes(first);
+
+        const positionals = envPassed ? opts._ : ['ui', ...opts._];
+
+        const [env, command, ...args] = positionals;
+        if (!command) {
+            this.printUsage();
+            return 1;
+        }
         let envStr = env;
         if (env === 'ui' && host) {
             envStr = `ui:${host}`;
         }
 
-        return this.spawn(command, fullArgs, envStr);
+        this.spawn(command, args, envStr);
+        return 0;
+    }
+
+    private printUsage() {
+        process.stderr.write(dedent`
+        usage: wbenv [{ui|curl|pretty}] command [args...]
+            ui     - send requests to Wirebird app
+            curl   - log requests in the terminal as Curl commands
+            pretty - log requests in the terminal
+        `);
     }
 
     constructor(
         private childProcessSpawn: ISpawn,
-        private processEnv: Record<string, string | undefined>
+        private processEnv: Record<string, string | undefined>,
+        private injectScriptPath: string
     ) {}
 
-    execute(argv: string[]): void {
+    execute(argv: string[]): number {
         return this.parse(argv);
     }
 }
