@@ -15,7 +15,7 @@ export class WBEnv {
             .join(' ');
         const argsForLog = args.join(' ');
 
-        process.stderr.write(`[wbenv] ${envsForLog} ${command} ${argsForLog}`);
+        console.error(`[wbenv] ${envsForLog} ${command} ${argsForLog}`);
 
         this.childProcessSpawn(command, args, {
             stdio: 'inherit',
@@ -50,12 +50,11 @@ export class WBEnv {
     }
 
     private printUsage() {
-        process.stderr.write(dedent`
-        usage: wbenv [{ui|curl|pretty}] command [args...]
-            ui     - send requests to Wirebird app
-            curl   - log requests in the terminal as Curl commands
-            pretty - log requests in the terminal
-        `);
+        console.error(dedent`
+            usage: wbenv [{ui|curl|pretty}] command [args...]
+                ui     - send requests to Wirebird app
+                curl   - log requests in the terminal as Curl commands
+                pretty - log requests in the terminal`);
     }
 
     constructor(
