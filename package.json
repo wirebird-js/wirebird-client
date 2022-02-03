@@ -28,6 +28,7 @@
     },
     "files": [
         "lib",
+        "bin",
         "inject.js",
         "README.md"
     ],
